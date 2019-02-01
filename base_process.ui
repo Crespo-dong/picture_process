@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>base_process</class>
+ <widget class="QMainWindow" name="base_process">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>912</width>
+    <height>716</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>图像处理</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="widget_for_layout" native="true">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>490</y>
+      <width>851</width>
+      <height>191</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelsrc">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>11</y>
+      <width>420</width>
+      <height>420</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border:2px solid red</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labeldst">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>11</y>
+      <width>420</width>
+      <height>420</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border:2px solid red</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="is_single_process">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>460</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>连续处理图像</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>440</y>
+      <width>811</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="labelsrctxt">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;源图像&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelsrctxt_2">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;效果图像&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>912</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="action_openpic"/>
+    <addaction name="action_savedst"/>
+    <addaction name="action_clear"/>
+    <addaction name="action_huanyuan"/>
+    <addaction name="action_exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>边缘检测</string>
+    </property>
+    <addaction name="actionSobel"/>
+    <addaction name="actionCanny"/>
+    <addaction name="actionLaplacian"/>
+    <addaction name="actionScharr"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>形态学处理</string>
+    </property>
+    <addaction name="action_select_scope"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>滤波</string>
+    </property>
+    <addaction name="action_bulr"/>
+    <addaction name="action_boxFilter"/>
+    <addaction name="action_GaussFilter"/>
+    <addaction name="action_midian"/>
+    <addaction name="action_bilateral"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>图像增强与变换</string>
+    </property>
+    <addaction name="action_equalizehist"/>
+    <addaction name="action_tiaojie_liangdu_duibidu"/>
+    <addaction name="action_warpAffine"/>
+    <addaction name="action_logPolar"/>
+   </widget>
+   <widget class="QMenu" name="menu_6">
+    <property name="title">
+     <string>二值化</string>
+    </property>
+    <addaction name="action_base"/>
+    <addaction name="actionTHRESH_OTSU"/>
+    <addaction name="actionTHRESH_TRIANGLE"/>
+    <addaction name="action_adapt"/>
+   </widget>
+   <widget class="QMenu" name="menu_7">
+    <property name="title">
+     <string>滤镜效果</string>
+    </property>
+    <addaction name="action_color_lvjing"/>
+    <addaction name="action_change_secaikongjian"/>
+    <addaction name="action_shougonghua_2"/>
+    <addaction name="action_art"/>
+    <addaction name="action_light"/>
+    <addaction name="action_diaoke"/>
+    <addaction name="action_teshuxiaoguo"/>
+   </widget>
+   <widget class="QMenu" name="menu_8">
+    <property name="title">
+     <string>关于</string>
+    </property>
+    <addaction name="action_help"/>
+   </widget>
+   <widget class="QMenu" name="menu_9">
+    <property name="title">
+     <string>图像检测</string>
+    </property>
+    <widget class="QMenu" name="menu_10">
+     <property name="title">
+      <string>霍夫变换</string>
+     </property>
+     <addaction name="action_huofu_line"/>
+     <addaction name="action_huofu_yuan"/>
+    </widget>
+    <addaction name="action_lunkuojiance"/>
+    <addaction name="menu_10"/>
+    <addaction name="action_jiaodianjiance"/>
+   </widget>
+   <widget class="QMenu" name="menu_11">
+    <property name="title">
+     <string>图像分割</string>
+    </property>
+    <addaction name="actionK_Means"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_5"/>
+   <addaction name="menu_6"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_7"/>
+   <addaction name="menu_9"/>
+   <addaction name="menu_11"/>
+   <addaction name="menu_8"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_openpic">
+   <property name="text">
+    <string>打开图片</string>
+   </property>
+  </action>
+  <action name="action_savedst">
+   <property name="text">
+    <string>保存效果图</string>
+   </property>
+  </action>
+  <action name="action_clear">
+   <property name="text">
+    <string>清除图像</string>
+   </property>
+  </action>
+  <action name="action_exit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="action_huanyuan">
+   <property name="text">
+    <string>还原图像</string>
+   </property>
+  </action>
+  <action name="action_select_scope">
+   <property name="text">
+    <string>选择操作参数</string>
+   </property>
+  </action>
+  <action name="action_bulr">
+   <property name="text">
+    <string>均值滤波</string>
+   </property>
+  </action>
+  <action name="action_boxFilter">
+   <property name="text">
+    <string>方框滤波</string>
+   </property>
+  </action>
+  <action name="action_GaussFilter">
+   <property name="text">
+    <string>高斯滤波</string>
+   </property>
+  </action>
+  <action name="action_midian">
+   <property name="text">
+    <string>中值滤波</string>
+   </property>
+  </action>
+  <action name="action_bilateral">
+   <property name="text">
+    <string>双边滤波</string>
+   </property>
+  </action>
+  <action name="action_equalizehist">
+   <property name="text">
+    <string>直方图均衡化</string>
+   </property>
+  </action>
+  <action name="action_tiaojie_liangdu_duibidu">
+   <property name="text">
+    <string>调节亮度/对比度</string>
+   </property>
+  </action>
+  <action name="action_base">
+   <property name="text">
+    <string>基本二值化方法</string>
+   </property>
+  </action>
+  <action name="actionTHRESH_OTSU">
+   <property name="text">
+    <string>THRESH_OTSU + 基本二值化方法</string>
+   </property>
+  </action>
+  <action name="actionTHRESH_TRIANGLE">
+   <property name="text">
+    <string>THRESH_TRIANGLE + 基本二值化方法</string>
+   </property>
+  </action>
+  <action name="action_adapt">
+   <property name="text">
+    <string>自适应二值化</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel算子</string>
+   </property>
+  </action>
+  <action name="actionCanny">
+   <property name="text">
+    <string>Canny算子</string>
+   </property>
+  </action>
+  <action name="actionLaplacian">
+   <property name="text">
+    <string>Laplacian算子</string>
+   </property>
+  </action>
+  <action name="actionScharr">
+   <property name="text">
+    <string>Scharr算子</string>
+   </property>
+  </action>
+  <action name="action_color_lvjing">
+   <property name="text">
+    <string>图片颜色转换</string>
+   </property>
+  </action>
+  <action name="action_change_secaikongjian">
+   <property name="text">
+    <string>色度图效果转换</string>
+   </property>
+  </action>
+  <action name="action_shougonghua_2">
+   <property name="text">
+    <string>手工画效果</string>
+   </property>
+  </action>
+  <action name="action_art">
+   <property name="text">
+    <string>艺术效果</string>
+   </property>
+  </action>
+  <action name="action_light">
+   <property name="text">
+    <string>光线效果</string>
+   </property>
+  </action>
+  <action name="action_diaoke">
+   <property name="text">
+    <string>雕刻效果</string>
+   </property>
+  </action>
+  <action name="action_help">
+   <property name="text">
+    <string>软件说明</string>
+   </property>
+  </action>
+  <action name="action_lunkuojiance">
+   <property name="text">
+    <string>轮廓检测</string>
+   </property>
+  </action>
+  <action name="action_teshuxiaoguo">
+   <property name="text">
+    <string>特殊效果</string>
+   </property>
+  </action>
+  <action name="action_huofu_line">
+   <property name="text">
+    <string>霍夫线变换</string>
+   </property>
+  </action>
+  <action name="action_huofu_yuan">
+   <property name="text">
+    <string>霍夫圆变换</string>
+   </property>
+  </action>
+  <action name="action_jiaodianjiance">
+   <property name="text">
+    <string>角点检测</string>
+   </property>
+  </action>
+  <action name="action_warpAffine">
+   <property name="text">
+    <string>仿射变换</string>
+   </property>
+  </action>
+  <action name="action_logPolar">
+   <property name="text">
+    <string>笛卡尔坐标与极坐标相互转换</string>
+   </property>
+  </action>
+  <action name="actionK_Means">
+   <property name="text">
+    <string>K-均值聚类</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
