@@ -181,6 +181,7 @@ void base_process::on_action_select_scope_triggered()
     element_show_02 = new QLabel(tr(" 操作核尺寸："),ui->widget_for_layout);
 
     element_size_w = new QComboBox(ui->widget_for_layout);
+    element_size_w->addItem(tr("核宽：1"),1);
     element_size_w->addItem(tr("核宽：3"),3);
     element_size_w->addItem(tr("核宽：5"),5);
     element_size_w->addItem(tr("核宽：7"),7);
@@ -193,6 +194,7 @@ void base_process::on_action_select_scope_triggered()
     connect(element_size_w, SIGNAL(activated(const QString &)),this, SLOT(domorphfun()));
 
     element_size_h = new QComboBox(ui->widget_for_layout);
+    element_size_h->addItem(tr("核高：1"),1);
     element_size_h->addItem(tr("核高：3"),3);
     element_size_h->addItem(tr("核高：5"),5);
     element_size_h->addItem(tr("核高：7"),7);
@@ -255,6 +257,7 @@ void base_process::on_action_bulr_triggered()
     close_other_obj();
 
     blursize_w = new QComboBox(ui->widget_for_layout);
+    blursize_w->addItem(tr("核宽：1"),1);
     blursize_w->addItem(tr("核宽：3"),3);
     blursize_w->addItem(tr("核宽：5"),5);
     blursize_w->addItem(tr("核宽：7"),7);
@@ -267,6 +270,7 @@ void base_process::on_action_bulr_triggered()
     connect(blursize_w, SIGNAL(activated(const QString &)),this, SLOT(blur_process_pic()));
 
     blursize_h = new QComboBox(ui->widget_for_layout);
+    blursize_h->addItem(tr("核高：1"),1);
     blursize_h->addItem(tr("核高：3"),3);
     blursize_h->addItem(tr("核高：5"),5);
     blursize_h->addItem(tr("核高：7"),7);
@@ -309,6 +313,7 @@ void base_process::on_action_boxFilter_triggered()
     close_other_obj();
 
     boxFiltersize_w = new QComboBox(ui->widget_for_layout);
+    boxFiltersize_w->addItem(tr("核宽：1"),1);
     boxFiltersize_w->addItem(tr("核宽：3"),3);
     boxFiltersize_w->addItem(tr("核宽：5"),5);
     boxFiltersize_w->addItem(tr("核宽：7"),7);
@@ -321,6 +326,7 @@ void base_process::on_action_boxFilter_triggered()
     connect(boxFiltersize_w, SIGNAL(activated(const QString &)),this, SLOT(boxFilter_process_pic()));
 
     boxFiltersize_h = new QComboBox(ui->widget_for_layout);
+    boxFiltersize_h->addItem(tr("核高：1"),1);
     boxFiltersize_h->addItem(tr("核高：3"),3);
     boxFiltersize_h->addItem(tr("核高：5"),5);
     boxFiltersize_h->addItem(tr("核高：7"),7);
@@ -384,6 +390,7 @@ void base_process::on_action_GaussFilter_triggered()
     close_other_obj();
 
     gausssizewith = new QComboBox(ui->widget_for_layout);
+    gausssizewith->addItem(tr("核宽：1"),1);
     gausssizewith->addItem(tr("核宽：3"),3);
     gausssizewith->addItem(tr("核宽：5"),5);
     gausssizewith->addItem(tr("核宽：7"),7);
@@ -396,6 +403,7 @@ void base_process::on_action_GaussFilter_triggered()
     connect(gausssizewith, SIGNAL(activated(const QString &)),this, SLOT(gussFilter_process_pic()));
 
     gusssizehight = new QComboBox(ui->widget_for_layout);
+    gusssizehight->addItem(tr("核高：1"),1);
     gusssizehight->addItem(tr("核高：3"),3);
     gusssizehight->addItem(tr("核高：5"),5);
     gusssizehight->addItem(tr("核高：7"),7);
@@ -894,6 +902,7 @@ void base_process::on_action_logPolar_triggered()
     process_logPolar();
 }
 
+//笛卡尔坐标与极坐标间转换处理
 void base_process::process_logPolar()
 {
     if(logPolar_center_x_slider->value() >=10)
@@ -928,6 +937,77 @@ void base_process::process_logPolar()
     }
 
     logPolar(srcImage,dstImage,center,logPolar_Magnitude_SpinBox->value(),flags);
+    dstlabel_show(dstImage);
+}
+
+//线性变换
+void base_process::on_action_kx_b_triggered()
+{
+    if (srcImage.empty())
+    {
+       QMessageBox::information(this,"提示","请先打开一张图片");
+       return;
+    }
+    close_other_obj();
+
+    kx_b_k_slider = new QSlider(ui->widget_for_layout);
+    kx_b_k_slider->setOrientation(Qt::Horizontal);//水平方向
+    kx_b_k_slider->setMinimum(-100);
+    kx_b_k_slider->setMaximum(100);
+    kx_b_k_slider->setSingleStep(10);//步长 动一下移动的距离
+    kx_b_k_slider->setTickInterval(10); // 设置刻度间隔
+    kx_b_k_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
+    kx_b_k_slider->setValue(10);//设置一个默认值
+    connect(kx_b_k_slider, SIGNAL(valueChanged(int)), this, SLOT(kx_b()));
+
+    kx_b_k_LineEdit = new QLineEdit(ui->widget_for_layout);
+    kx_b_k_LineEdit->setFocusPolicy(Qt::NoFocus);//无法获得焦点，即无法编辑
+    kx_b_k_LineEdit->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+
+    kx_b_b_slider = new QSlider(ui->widget_for_layout);
+    kx_b_b_slider->setOrientation(Qt::Horizontal);//水平方向
+    kx_b_b_slider->setMinimum(-2000);
+    kx_b_b_slider->setMaximum(2000);
+    kx_b_b_slider->setSingleStep(100);//步长 动一下移动的距离
+    kx_b_b_slider->setTickInterval(100); // 设置刻度间隔
+    kx_b_b_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
+    kx_b_b_slider->setValue(100);//设置一个默认值
+    connect(kx_b_b_slider, SIGNAL(valueChanged(int)), this, SLOT(kx_b()));
+
+    kx_b_b_LineEdit = new QLineEdit(ui->widget_for_layout);
+    kx_b_b_LineEdit->setFocusPolicy(Qt::NoFocus);//无法获得焦点，即无法编辑
+    kx_b_b_LineEdit->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+
+    kx_b_show01 = new QLabel(tr("k："),ui->widget_for_layout);
+    kx_b_show02 = new QLabel(tr("b："),ui->widget_for_layout);
+
+    if(widget_layout != NULL)
+    {
+        delete widget_layout;
+        widget_layout = NULL;
+    }
+    widget_layout = new QGridLayout(ui->widget_for_layout);
+    widget_layout->addWidget(kx_b_show01,0,0);
+    widget_layout->addWidget(kx_b_k_LineEdit,0,1);
+    widget_layout->addWidget(kx_b_k_slider,0,2);
+    widget_layout->addWidget(kx_b_show02,1,0);
+    widget_layout->addWidget(kx_b_b_LineEdit,1,1);
+    widget_layout->addWidget(kx_b_b_slider,1,2);
+    ui->widget_for_layout->setLayout(widget_layout);
+
+    kx_b();
+}
+
+//线性变换处理
+void base_process::kx_b()
+{
+    double tempk = double(kx_b_k_slider->value())/10;
+    kx_b_k_LineEdit->setText(QString::number(tempk,10,2));
+
+    double tempb = double(kx_b_b_slider->value())/10;
+    kx_b_b_LineEdit->setText(QString::number(tempb,10,2));
+
+    convertScaleAbs(srcImage,dstImage,tempk,tempb);
     dstlabel_show(dstImage);
 }
 
@@ -1782,6 +1862,8 @@ void base_process::on_action_color_lvjing_triggered()
     color_xiaoguo->addItem(tr("转换到Luv颜色模型"),3);
     color_xiaoguo->addItem(tr("转换到HLS颜色模型"),4);
     color_xiaoguo->addItem(tr("转换到YUV颜色模型"),5);
+    color_xiaoguo->addItem(tr("转换到YCC颜色模型"),14);
+    color_xiaoguo->addItem(tr("转换到CIEXYZ颜色模型"),15);
     color_xiaoguo->addItem(tr("灰度图"),6);
     color_xiaoguo->addItem(tr("红绿通道互换"),7);
     color_xiaoguo->addItem(tr("R通道"),8);
@@ -1808,7 +1890,6 @@ void base_process::on_action_color_lvjing_triggered()
 void base_process::color_lvjing_process()
 {    
     int color_xiaoguovarint = color_xiaoguo->currentData(Qt::UserRole).toInt();
-
     if(color_xiaoguovarint == 1)//转换到HSV颜色空间
     {
         cvtColor(srcImage,dstImage,CV_RGB2HSV);
@@ -1832,6 +1913,16 @@ void base_process::color_lvjing_process()
     else if(color_xiaoguovarint == 5)
     {
         cvtColor(srcImage,dstImage,CV_RGB2YUV);
+        dstlabel_show(dstImage);
+    }
+    if(color_xiaoguovarint == 14)
+    {
+        cvtColor(srcImage,dstImage,CV_RGB2YCrCb);
+        dstlabel_show(dstImage);
+    }
+    if(color_xiaoguovarint == 15)
+    {
+        cvtColor(srcImage,dstImage,CV_RGB2XYZ);
         dstlabel_show(dstImage);
     }
     else if(color_xiaoguovarint == 6)
@@ -4298,6 +4389,7 @@ void base_process::on_actionK_Means_triggered()
     process_keans();
 }
 
+//k近邻图像分割处理
 void base_process::process_keans()
 {
     int width = srcImage.cols;
@@ -4411,8 +4503,8 @@ void base_process::dropEvent(QDropEvent* event)
 void base_process::on_action_help_triggered()
 {    
     QMessageBox::information(this,"说明","基于Qt5.9 & OpenCV3.0"
-                                       "\n版本：1.9.0"
-                                       "\n更新时间：2019年1月31日"
+                                       "\n版本：1.9.1"
+                                       "\n更新时间：2019年2月8日"
                                        "\n本软件不定时更新"
                                        "\n作者QQ：709579619 | 微信：siyuan7095");
     return;

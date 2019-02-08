@@ -116,6 +116,13 @@ public:
     QLabel* logPolar_show01;
     QLabel* logPolar_show02;
     QLabel* logPolar_show03;
+    //线性变换
+    QSlider* kx_b_k_slider;
+    QLineEdit* kx_b_k_LineEdit;
+    QSlider* kx_b_b_slider;
+    QLineEdit* kx_b_b_LineEdit;
+    QLabel* kx_b_show01;
+    QLabel* kx_b_show02;
     //基本二值化
     QComboBox* jiben_thresh_func;
     QLabel* show_input_thresh_value;
@@ -450,6 +457,10 @@ private slots:
     void on_actionK_Means_triggered();
 
     void process_keans();
+
+    void on_action_kx_b_triggered();
+
+    void kx_b();
 
 private:
     Ui::base_process *ui;

@@ -172,6 +172,7 @@
     <addaction name="action_tiaojie_liangdu_duibidu"/>
     <addaction name="action_warpAffine"/>
     <addaction name="action_logPolar"/>
+    <addaction name="action_kx_b"/>
    </widget>
    <widget class="QMenu" name="menu_6">
     <property name="title">
@@ -411,6 +412,11 @@
   <action name="actionK_Means">
    <property name="text">
     <string>K-均值聚类</string>
+   </property>
+  </action>
+  <action name="action_kx_b">
+   <property name="text">
+    <string>线性变换：y = |kx + b|</string>
    </property>
   </action>
  </widget>
