@@ -97,7 +97,6 @@ void base_process::on_action_savedst_triggered()
     QString saveFileName = QFileDialog::getSaveFileName(this,
                                                         tr("保存文件"),
                                                         QDir::currentPath(),
-                                                        /*tr("Image File(*.bmp *.jpg *.jpeg *.png)")*/
                                                         tr("image(*.bmp);;image(*.jpg);;image(*.jpeg);;image(*.png)"));
     if(saveFileName.isEmpty())//比如打开选择对话框了随即点取消 saveFileName为空
     {
@@ -3467,8 +3466,8 @@ void base_process::on_action_lunkuojiance_triggered()
     widget_layout->addWidget(lunkuojiance_draw_poly,5,2);
     widget_layout->addWidget(lunkuojiance_draw_in_src,5,3);
     widget_layout->addWidget(lunkuojiance_draw_rectangle,6,0);
-    widget_layout->addWidget(lunkuojiance_draw_circle,6,1);
-    widget_layout->addWidget(lunkuojiance_draw_AreaRect,6,2);
+    widget_layout->addWidget(lunkuojiance_draw_AreaRect,6,1);
+    widget_layout->addWidget(lunkuojiance_draw_circle,6,2);
     widget_layout->addWidget(lunkuojiance_draw_Ellipse,6,3);
     ui->widget_for_layout->setLayout(widget_layout);
 
@@ -3625,9 +3624,24 @@ void base_process::lunkuojiance_process()
         {
             Point2f rect_points[4];
             minRect[i].points(rect_points);
-            for (int j = 0; j < 4; j++)
+            int line_cuxi = lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt();
+            if(line_cuxi != -1)//非填充
             {
-                line(drawing, rect_points[j], rect_points[(j + 1) % 4], Contourscolor, lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt());
+                for (int j = 0; j < 4; j++)
+                {
+                    line(drawing, rect_points[j], rect_points[(j + 1) % 4], Contourscolor, line_cuxi);
+                }
+            }
+            else //填充
+            {
+                Point rookPoints[1][4];
+                for (int j = 0; j < 4; j++)
+                {
+                    rookPoints[0][j] = rect_points[j];
+                }
+                const Point* ppt[1]={rookPoints[0]};
+                int npt[]={4};
+                fillPoly(drawing, ppt, npt, 1, Contourscolor);//多边形
             }
         }
 
@@ -4503,8 +4517,8 @@ void base_process::dropEvent(QDropEvent* event)
 void base_process::on_action_help_triggered()
 {    
     QMessageBox::information(this,"说明","基于Qt5.9 & OpenCV3.0"
-                                       "\n版本：1.9.1"
-                                       "\n更新时间：2019年2月8日"
+                                       "\n版本：1.9.2"
+                                       "\n更新时间：2019年2月10日"
                                        "\n本软件不定时更新"
                                        "\n作者QQ：709579619 | 微信：siyuan7095");
     return;
