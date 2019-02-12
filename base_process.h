@@ -35,6 +35,7 @@
 #include <QMetaEnum>
 #include <QLineEdit>
 #include <QTime>
+#include <QFileInfo>
 
 using namespace std;
 using namespace cv;
@@ -55,6 +56,7 @@ public:
     Mat dstImage;
     Mat srcImage_copy;//还原图像时使用
     QImage img;//QT的图像对象
+    QString imgfilename;//当前处理的图像的文件名
 
     //形态学操作
     QLabel* element_show_01;

@@ -24,7 +24,7 @@ void base_process::on_action_openpic_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("打开图片文件"),
-                                                    QDir::currentPath(),//默认路径，静态方法调用，使用程序运行的当前路径
+                                                    "/", //QDir::currentPath(),//默认路径，静态方法调用，使用程序运行的当前路径
                                                     tr("Image File(*.bmp *.jpg *.jpeg *.png)"));
 
     qDebug()<<tr("源图像路径：")<<fileName;
@@ -36,6 +36,7 @@ void base_process::on_action_openpic_triggered()
 
     QFile *file = new QFile;
     file->setFileName(fileName);
+    imgfilename = QFileInfo(fileName).baseName();
     QTextCodec *code = QTextCodec::codecForName("gb18030");//确保中文不乱码
     std::string name = code->fromUnicode(fileName).data();
     //读取文件
@@ -94,10 +95,11 @@ void base_process::on_action_savedst_triggered()
         return;
     }
 
+    static int num = 1;
     QString saveFileName = QFileDialog::getSaveFileName(this,
                                                         tr("保存文件"),
-                                                        QDir::currentPath(),
-                                                        tr("image(*.bmp);;image(*.jpg);;image(*.jpeg);;image(*.png)"));
+                                                        "/" + imgfilename + tr("-效果图-%1.png").arg(num),
+                                                        tr("image(*.png);;image(*.jpg);;image(*.jpeg);;image(*.bmp)"));
     if(saveFileName.isEmpty())//比如打开选择对话框了随即点取消 saveFileName为空
     {
         return;
@@ -118,6 +120,7 @@ void base_process::on_action_savedst_triggered()
         compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
         imwrite(fileAsSave,dstImage,compression_params);
     }
+    num++;
 }
 
 //清除图像
@@ -132,8 +135,8 @@ void base_process::on_action_clear_triggered()
 
 void base_process::on_action_exit_triggered()
 {
-    //exit(0);//关闭程序
-    this->close();//关闭当前窗口
+    exit(0);//关闭程序
+    //this->close();//关闭当前窗口
 }
 
 //还原图像
@@ -3373,6 +3376,7 @@ void base_process::on_action_lunkuojiance_triggered()
     lunkuojiance_color_QComboBox = new QComboBox(ui->widget_for_layout);
     lunkuojiance_color_QComboBox->addItem(tr("黑白轮廓"),0);
     lunkuojiance_color_QComboBox->addItem(tr("彩色轮廓"),1);
+    lunkuojiance_color_QComboBox->addItem(tr("黑白轮廓色，彩色绘制色"),2);
     connect(lunkuojiance_color_QComboBox, SIGNAL(activated(const QString &)),this, SLOT(lunkuojiance_process()));
 
     lunkuojiance_lunkuocuxi_QComboBox = new QComboBox(ui->widget_for_layout);
@@ -3422,7 +3426,7 @@ void base_process::on_action_lunkuojiance_triggered()
     lunkuojiance_mianji_shaixuan_SpinBox = new QSpinBox(ui->widget_for_layout);
     lunkuojiance_mianji_shaixuan_SpinBox->setMinimum(1);
     lunkuojiance_mianji_shaixuan_SpinBox->setMaximum(10000);
-    lunkuojiance_mianji_shaixuan_SpinBox->setValue(100);//设置一个默认值
+    lunkuojiance_mianji_shaixuan_SpinBox->setValue(1);//设置一个默认值
 
     lunkuojiance_mianji_shaixuan_slider = new QSlider(ui->widget_for_layout);
     lunkuojiance_mianji_shaixuan_slider->setOrientation(Qt::Horizontal);//水平方向
@@ -3431,7 +3435,7 @@ void base_process::on_action_lunkuojiance_triggered()
     lunkuojiance_mianji_shaixuan_slider->setSingleStep(200);//步长 动一下移动的距离
     lunkuojiance_mianji_shaixuan_slider->setTickInterval(400); // 设置刻度间隔
     lunkuojiance_mianji_shaixuan_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
-    lunkuojiance_mianji_shaixuan_slider->setValue(100);//设置一个默认值
+    lunkuojiance_mianji_shaixuan_slider->setValue(1);//设置一个默认值
 
     connect(lunkuojiance_mianji_shaixuan_slider, SIGNAL(valueChanged(int)), lunkuojiance_mianji_shaixuan_SpinBox, SLOT(setValue(int)));
     connect(lunkuojiance_mianji_shaixuan_SpinBox, SIGNAL(valueChanged(int)), lunkuojiance_mianji_shaixuan_slider, SLOT(setValue(int)));
@@ -3459,8 +3463,8 @@ void base_process::on_action_lunkuojiance_triggered()
     widget_layout->addWidget(lunkuojiance_mianji_shaixuan_slider,3,2,1,2);
     widget_layout->addWidget(lunkuojiance_RETR_QComboBox,4,0);
     widget_layout->addWidget(lunkuojiance_APPROX_QComboBox,4,1);
-    widget_layout->addWidget(lunkuojiance_color_QComboBox,4,2);
-    widget_layout->addWidget(lunkuojiance_lunkuocuxi_QComboBox,4,3);
+    widget_layout->addWidget(lunkuojiance_lunkuocuxi_QComboBox,4,2);
+    widget_layout->addWidget(lunkuojiance_color_QComboBox,4,3);
     widget_layout->addWidget(lunkuojiance_isdraw_ju,5,0);
     widget_layout->addWidget(lunkuojiance_draw_hull,5,1);
     widget_layout->addWidget(lunkuojiance_draw_poly,5,2);
@@ -3486,6 +3490,8 @@ void base_process::lunkuojiance_process()
 
     lunkuojiance_slider_h->setMinimum(cannythreshdif);
     lunkuojiance_SpinBox_h->setMinimum(cannythreshdif);
+
+    int line_cuxi = lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt();
 
     bool isL2gradient = false;
     int l2gradientvarint = L2gradient_lunkuojiance->currentData(Qt::UserRole).toInt();
@@ -3582,41 +3588,57 @@ void base_process::lunkuojiance_process()
         {
             Contourscolor = Scalar(rand()&255,rand()&255,rand()&255);
         }
+
         //绘制轮廓
-        drawContours(drawing,
-                     g_vContours,
-                     i,
-                     Contourscolor,
-                     lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt());
+        if(lunkuojiance_color_QComboBox->currentData(Qt::UserRole).toInt() == 2)
+        {
+            drawContours(drawing,
+                         g_vContours,
+                         i,
+                         Scalar(255,255,255),
+                         line_cuxi);
+        }
+        else
+        {
+            drawContours(drawing,
+                         g_vContours,
+                         i,
+                         Contourscolor,
+                         line_cuxi);
+        }
 
         //绘制矩
         if(lunkuojiance_isdraw_ju->checkState() == Qt::Checked)
         {
-            circle(drawing, mc[i], 3, Contourscolor, -1);
+            circle(drawing,
+                   mc[i],
+                   line_cuxi > 0 ? line_cuxi * 3 : 3,
+                   Contourscolor,
+                   -1);
         }
 
         //绘制凸包
         if(lunkuojiance_draw_hull->checkState() == Qt::Checked)
         {
-            drawContours(drawing,hull,i,Contourscolor,lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt());
+            drawContours(drawing,hull,i,Contourscolor,line_cuxi);
         }
 
         //绘制逼近多边形
         if(lunkuojiance_draw_poly->checkState() == Qt::Checked)
         {
-            drawContours(drawing, contours_poly, i, Contourscolor, lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt());
+            drawContours(drawing, contours_poly, i, Contourscolor, line_cuxi);
         }
 
         //绘制外接矩形
         if(lunkuojiance_draw_rectangle->checkState() == Qt::Checked)
         {
-            rectangle(drawing, boundRect[i].tl(), boundRect[i].br(), Contourscolor, lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt());
+            rectangle(drawing, boundRect[i].tl(), boundRect[i].br(), Contourscolor, line_cuxi);
         }
 
         //绘制外接圆
         if(lunkuojiance_draw_circle->checkState() == Qt::Checked)
         {
-            circle(drawing, center[i], (int)radius[i], Contourscolor, lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt());
+            circle(drawing, center[i], (int)radius[i], Contourscolor, line_cuxi);
         }
 
         //绘制可旋转外接矩形
@@ -3624,7 +3646,6 @@ void base_process::lunkuojiance_process()
         {
             Point2f rect_points[4];
             minRect[i].points(rect_points);
-            int line_cuxi = lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt();
             if(line_cuxi != -1)//非填充
             {
                 for (int j = 0; j < 4; j++)
@@ -3648,7 +3669,7 @@ void base_process::lunkuojiance_process()
         //绘制外接椭圆
         if(lunkuojiance_draw_Ellipse->checkState() == Qt::Checked)
         {
-            ellipse(drawing, minEllipse[i], Contourscolor, lunkuojiance_lunkuocuxi_QComboBox->currentData(Qt::UserRole).toInt());
+            ellipse(drawing, minEllipse[i], Contourscolor, line_cuxi);
         }
     }
 
@@ -4058,8 +4079,6 @@ void base_process::Hough_circle_process()
         linescolor = Scalar(rand()&255,rand()&255,rand()&255);
         Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
         int radius = cvRound(circles[i][2]);
-        //绘制圆心
-        circle(dstImage, center, 5, Scalar(255, 0, 0), -1, 8);
         //绘制圆轮廓
         circle(dstImage,
                center,
@@ -4067,6 +4086,8 @@ void base_process::Hough_circle_process()
                linescolor,
                Hough_circles_thickness->text().toInt(),
                8);
+        //绘制圆心
+        circle(dstImage, center, 5, Scalar(255, 0, 0), -1, 8);
 
         if(Hough_Radius_draw_in_src->checkState() == Qt::Checked)//选中绘制半径
         {
@@ -4074,16 +4095,14 @@ void base_process::Hough_circle_process()
             //根据角度、半径、圆心求另一点的坐标
             int x1 = int(center.x + radius * cos(angle * CV_PI/180));
             int y1 = int(center.y + radius * sin(angle * CV_PI/180));
-            int thickness;
             if(Hough_circles_thickness->text().toInt() == -1)
             {
-                thickness = 1;
+                line(dstImage, center, Point(x1,y1), Scalar(rand()&255,rand()&255,rand()&255), 2);
             }
             else
             {
-                thickness = Hough_circles_thickness->text().toInt();
-            }
-            line(dstImage,center,Point(x1,y1),linescolor,thickness);
+                line(dstImage, center, Point(x1,y1), linescolor, Hough_circles_thickness->text().toInt());
+            }            
         }
     }
     dstlabel_show(dstImage);
@@ -4494,6 +4513,7 @@ void base_process::dropEvent(QDropEvent* event)
     close_other_obj();
     QFile *file = new QFile;
     file->setFileName(fileName);
+    imgfilename = QFileInfo(fileName).baseName();
     QTextCodec *code = QTextCodec::codecForName("gb18030");//确保中文不乱码
     std::string name = code->fromUnicode(fileName).data();
     //读取文件
@@ -4517,10 +4537,11 @@ void base_process::dropEvent(QDropEvent* event)
 void base_process::on_action_help_triggered()
 {    
     QMessageBox::information(this,"说明","基于Qt5.9 & OpenCV3.0"
-                                       "\n版本：1.9.2"
-                                       "\n更新时间：2019年2月10日"
-                                       "\n本软件不定时更新"
-                                       "\n作者QQ：709579619 | 微信：siyuan7095");
+                                       "\n版本：1.9.4"
+                                       "\n更新时间：2019年2月12日"
+                                       "\n作者QQ：709579619 | 微信：siyuan7095"
+                                       "\n本软件不定时更新，更新发布地址："
+                                       "\nhttps://github.com/siyuan7095/picture_process");
     return;
 }
 
@@ -4537,7 +4558,7 @@ void base_process::close_other_obj()
         delete child;
     }
 
-    if(ui->is_single_process->checkState() == Qt::Checked)
+    if(ui->is_single_process->checkState() == Qt::Checked)//是否连续处理图像，是则将当前的效果图作为下次处理的源图
     {
         if(!dstImage.empty())
         {
