@@ -180,35 +180,24 @@ void base_process::on_action_select_scope_triggered()
     element_type->addItem(tr("十字形"),cv::MORPH_CROSS);
     connect(element_type, SIGNAL(activated(const QString &)),this, SLOT(domorphfun()));
 
-    element_show_02 = new QLabel(tr(" 操作核尺寸："),ui->widget_for_layout);
+    element_show_02 = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
 
     element_size_w = new QComboBox(ui->widget_for_layout);
-    element_size_w->addItem(tr("核宽：1"),1);
-    element_size_w->addItem(tr("核宽：3"),3);
-    element_size_w->addItem(tr("核宽：5"),5);
-    element_size_w->addItem(tr("核宽：7"),7);
-    element_size_w->addItem(tr("核宽：9"),9);
-    element_size_w->addItem(tr("核宽：11"),11);
-    element_size_w->addItem(tr("核宽：13"),13);
-    element_size_w->addItem(tr("核宽：15"),15);
-    element_size_w->addItem(tr("核宽：17"),17);
-    element_size_w->addItem(tr("核宽：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        element_size_w->addItem(tr("核宽：%1").arg(i),i);
+    }
+
     connect(element_size_w, SIGNAL(activated(const QString &)),this, SLOT(domorphfun()));
 
     element_size_h = new QComboBox(ui->widget_for_layout);
-    element_size_h->addItem(tr("核高：1"),1);
-    element_size_h->addItem(tr("核高：3"),3);
-    element_size_h->addItem(tr("核高：5"),5);
-    element_size_h->addItem(tr("核高：7"),7);
-    element_size_h->addItem(tr("核高：9"),9);
-    element_size_h->addItem(tr("核高：11"),11);
-    element_size_h->addItem(tr("核高：13"),13);
-    element_size_h->addItem(tr("核高：15"),15);
-    element_size_h->addItem(tr("核高：17"),17);
-    element_size_h->addItem(tr("核高：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        element_size_h->addItem(tr("核高：%1").arg(i),i);
+    }
     connect(element_size_h, SIGNAL(activated(const QString &)),this, SLOT(domorphfun()));
 
-    element_show_03 = new QLabel(tr(" 形态学操作类型："),ui->widget_for_layout);
+    element_show_03 = new QLabel(tr("形态学操作类型："),ui->widget_for_layout);
 
     morphfun = new QComboBox(ui->widget_for_layout);
     morphfun->addItem(tr("腐蚀"),cv::MORPH_ERODE);
@@ -233,6 +222,7 @@ void base_process::on_action_select_scope_triggered()
     widget_layout->addWidget(element_size_h,0,4);
     widget_layout->addWidget(element_show_03,0,5);
     widget_layout->addWidget(morphfun,0,6);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     domorphfun();
@@ -259,30 +249,20 @@ void base_process::on_action_bulr_triggered()
     close_other_obj();
 
     blursize_w = new QComboBox(ui->widget_for_layout);
-    blursize_w->addItem(tr("核宽：1"),1);
-    blursize_w->addItem(tr("核宽：3"),3);
-    blursize_w->addItem(tr("核宽：5"),5);
-    blursize_w->addItem(tr("核宽：7"),7);
-    blursize_w->addItem(tr("核宽：9"),9);
-    blursize_w->addItem(tr("核宽：11"),11);
-    blursize_w->addItem(tr("核宽：13"),13);
-    blursize_w->addItem(tr("核宽：15"),15);
-    blursize_w->addItem(tr("核宽：17"),17);
-    blursize_w->addItem(tr("核宽：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        blursize_w->addItem(tr("核宽：%1").arg(i),i);
+    }
     connect(blursize_w, SIGNAL(activated(const QString &)),this, SLOT(blur_process_pic()));
 
     blursize_h = new QComboBox(ui->widget_for_layout);
-    blursize_h->addItem(tr("核高：1"),1);
-    blursize_h->addItem(tr("核高：3"),3);
-    blursize_h->addItem(tr("核高：5"),5);
-    blursize_h->addItem(tr("核高：7"),7);
-    blursize_h->addItem(tr("核高：9"),9);
-    blursize_h->addItem(tr("核高：11"),11);
-    blursize_h->addItem(tr("核高：13"),13);
-    blursize_h->addItem(tr("核高：15"),15);
-    blursize_h->addItem(tr("核高：17"),17);
-    blursize_h->addItem(tr("核高：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        blursize_h->addItem(tr("核高：%1").arg(i),i);
+    }
     connect(blursize_h, SIGNAL(activated(const QString &)),this, SLOT(blur_process_pic()));
+
+    blur_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -290,8 +270,10 @@ void base_process::on_action_bulr_triggered()
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(blursize_w,0,0);
-    widget_layout->addWidget(blursize_h,0,1);
+    widget_layout->addWidget(blur_show,0,0);
+    widget_layout->addWidget(blursize_w,0,1);
+    widget_layout->addWidget(blursize_h,0,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     blur_process_pic();
@@ -315,29 +297,17 @@ void base_process::on_action_boxFilter_triggered()
     close_other_obj();
 
     boxFiltersize_w = new QComboBox(ui->widget_for_layout);
-    boxFiltersize_w->addItem(tr("核宽：1"),1);
-    boxFiltersize_w->addItem(tr("核宽：3"),3);
-    boxFiltersize_w->addItem(tr("核宽：5"),5);
-    boxFiltersize_w->addItem(tr("核宽：7"),7);
-    boxFiltersize_w->addItem(tr("核宽：9"),9);
-    boxFiltersize_w->addItem(tr("核宽：11"),11);
-    boxFiltersize_w->addItem(tr("核宽：13"),13);
-    boxFiltersize_w->addItem(tr("核宽：15"),15);
-    boxFiltersize_w->addItem(tr("核宽：17"),17);
-    boxFiltersize_w->addItem(tr("核宽：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        boxFiltersize_w->addItem(tr("核宽：%1").arg(i),i);
+    }
     connect(boxFiltersize_w, SIGNAL(activated(const QString &)),this, SLOT(boxFilter_process_pic()));
 
     boxFiltersize_h = new QComboBox(ui->widget_for_layout);
-    boxFiltersize_h->addItem(tr("核高：1"),1);
-    boxFiltersize_h->addItem(tr("核高：3"),3);
-    boxFiltersize_h->addItem(tr("核高：5"),5);
-    boxFiltersize_h->addItem(tr("核高：7"),7);
-    boxFiltersize_h->addItem(tr("核高：9"),9);
-    boxFiltersize_h->addItem(tr("核高：11"),11);
-    boxFiltersize_h->addItem(tr("核高：13"),13);
-    boxFiltersize_h->addItem(tr("核高：15"),15);
-    boxFiltersize_h->addItem(tr("核高：17"),17);
-    boxFiltersize_h->addItem(tr("核高：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        boxFiltersize_h->addItem(tr("核高：%1").arg(i),i);
+    }
     connect(boxFiltersize_h, SIGNAL(activated(const QString &)),this, SLOT(boxFilter_process_pic()));
 
     isNormalize = new QCheckBox(ui->widget_for_layout);
@@ -345,15 +315,19 @@ void base_process::on_action_boxFilter_triggered()
     isNormalize->setChecked(true);//选中
     connect(isNormalize, SIGNAL(stateChanged(int)), this, SLOT(boxFilter_process_pic()));
 
+    boxFilter_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
+
     if(widget_layout != NULL)
     {
         delete widget_layout;
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(boxFiltersize_w,0,0);
-    widget_layout->addWidget(boxFiltersize_h,0,1);
-    widget_layout->addWidget(isNormalize,0,2);
+    widget_layout->addWidget(boxFilter_show,0,0);
+    widget_layout->addWidget(boxFiltersize_w,0,1);
+    widget_layout->addWidget(boxFiltersize_h,0,2);
+    widget_layout->addWidget(isNormalize,0,3);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     boxFilter_process_pic();
@@ -392,30 +366,20 @@ void base_process::on_action_GaussFilter_triggered()
     close_other_obj();
 
     gausssizewith = new QComboBox(ui->widget_for_layout);
-    gausssizewith->addItem(tr("核宽：1"),1);
-    gausssizewith->addItem(tr("核宽：3"),3);
-    gausssizewith->addItem(tr("核宽：5"),5);
-    gausssizewith->addItem(tr("核宽：7"),7);
-    gausssizewith->addItem(tr("核宽：9"),9);
-    gausssizewith->addItem(tr("核宽：11"),11);
-    gausssizewith->addItem(tr("核宽：13"),13);
-    gausssizewith->addItem(tr("核宽：15"),15);
-    gausssizewith->addItem(tr("核宽：17"),17);
-    gausssizewith->addItem(tr("核宽：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        gausssizewith->addItem(tr("核宽：%1").arg(i),i);
+    }
     connect(gausssizewith, SIGNAL(activated(const QString &)),this, SLOT(gussFilter_process_pic()));
 
     gusssizehight = new QComboBox(ui->widget_for_layout);
-    gusssizehight->addItem(tr("核高：1"),1);
-    gusssizehight->addItem(tr("核高：3"),3);
-    gusssizehight->addItem(tr("核高：5"),5);
-    gusssizehight->addItem(tr("核高：7"),7);
-    gusssizehight->addItem(tr("核高：9"),9);
-    gusssizehight->addItem(tr("核高：11"),11);
-    gusssizehight->addItem(tr("核高：13"),13);
-    gusssizehight->addItem(tr("核高：15"),15);
-    gusssizehight->addItem(tr("核高：17"),17);
-    gusssizehight->addItem(tr("核高：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        gusssizehight->addItem(tr("核高：%1").arg(i),i);
+    }
     connect(gusssizehight, SIGNAL(activated(const QString &)),this, SLOT(gussFilter_process_pic()));
+
+    gauss_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -423,8 +387,10 @@ void base_process::on_action_GaussFilter_triggered()
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(gausssizewith,0,0);
-    widget_layout->addWidget(gusssizehight,0,1);
+    widget_layout->addWidget(gauss_show,0,0);
+    widget_layout->addWidget(gausssizewith,0,1);
+    widget_layout->addWidget(gusssizehight,0,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     gussFilter_process_pic();
@@ -448,16 +414,13 @@ void base_process::on_action_midian_triggered()
     close_other_obj();
 
     mediansize = new QComboBox(ui->widget_for_layout);
-    mediansize->addItem(tr("核尺寸：3"),3);
-    mediansize->addItem(tr("核尺寸：5"),5);
-    mediansize->addItem(tr("核尺寸：7"),7);
-    mediansize->addItem(tr("核尺寸：9"),9);
-    mediansize->addItem(tr("核尺寸：11"),11);
-    mediansize->addItem(tr("核尺寸：13"),13);
-    mediansize->addItem(tr("核尺寸：15"),15);
-    mediansize->addItem(tr("核尺寸：17"),17);
-    mediansize->addItem(tr("核尺寸：19"),19);
+    for(int i = 3;i <= 20;i += 2)
+    {
+        mediansize->addItem(tr("%1 × %1").arg(i),i);
+    }
     connect(mediansize, SIGNAL(activated(const QString &)),this, SLOT(median_process_pic()));
+
+    median_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -465,7 +428,9 @@ void base_process::on_action_midian_triggered()
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(mediansize,0,0);
+    widget_layout->addWidget(median_show,0,0);
+    widget_layout->addWidget(mediansize,0,1);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     median_process_pic();
@@ -543,6 +508,7 @@ void base_process::on_action_bilateral_triggered()
     widget_layout->addWidget(spacesigma_SpinBox,1,1);
     widget_layout->addWidget(spacesigma_slider,1,2);
     widget_layout->addWidget(is_chose_bilateral,1,3);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     bilateral_process_pic();
@@ -638,6 +604,7 @@ void base_process::on_action_tiaojie_liangdu_duibidu_triggered()
     widget_layout->addWidget(show_duibidu,1,0);
     widget_layout->addWidget(duibidu_LineEdit,1,1);
     widget_layout->addWidget(duibidu_slider,1,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     change_liangdu_duibidu();
@@ -763,6 +730,7 @@ void base_process::on_action_warpAffine_triggered()
     widget_layout->addWidget(warpAffine_show04,3,0);
     widget_layout->addWidget(warpAffine_scale_LineEdit,3,1);
     widget_layout->addWidget(warpAffine_scale_Slider,3,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     process_warpAffine();
@@ -813,8 +781,8 @@ void base_process::on_action_logPolar_triggered()
     close_other_obj();
 
     logPolar_type = new QComboBox(ui->widget_for_layout);
-    logPolar_type->addItem(tr("笛卡尔坐标->极坐标"),1);
-    logPolar_type->addItem(tr("极坐标->笛卡尔坐标"),2);
+    logPolar_type->addItem(tr("笛卡尔坐标 --> 极坐标"),1);
+    logPolar_type->addItem(tr("极坐标 --> 笛卡尔坐标"),2);
     connect(logPolar_type, SIGNAL(activated(const QString &)),this, SLOT(process_logPolar()));
 
     logPolar_center_x_SpinBox = new QSpinBox(ui->widget_for_layout);
@@ -861,13 +829,13 @@ void base_process::on_action_logPolar_triggered()
 
     logPolar_Magnitude_SpinBox = new QSpinBox(ui->widget_for_layout);
     logPolar_Magnitude_SpinBox->setMinimum(1);
-    logPolar_Magnitude_SpinBox->setMaximum(200);
+    logPolar_Magnitude_SpinBox->setMaximum(800);
     logPolar_Magnitude_SpinBox->setValue(80);//设置一个默认值
 
     logPolar_Magnitude_slider = new QSlider(ui->widget_for_layout);
     logPolar_Magnitude_slider->setOrientation(Qt::Horizontal);//水平方向
     logPolar_Magnitude_slider->setMinimum(1);
-    logPolar_Magnitude_slider->setMaximum(200);
+    logPolar_Magnitude_slider->setMaximum(800);
     logPolar_Magnitude_slider->setSingleStep(10);//步长 动一下移动的距离
     logPolar_Magnitude_slider->setTickInterval(10); // 设置刻度间隔
     logPolar_Magnitude_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
@@ -899,6 +867,7 @@ void base_process::on_action_logPolar_triggered()
     widget_layout->addWidget(logPolar_show03,3,0);
     widget_layout->addWidget(logPolar_Magnitude_SpinBox,3,1);
     widget_layout->addWidget(logPolar_Magnitude_slider,3,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     process_logPolar();
@@ -995,6 +964,7 @@ void base_process::on_action_kx_b_triggered()
     widget_layout->addWidget(kx_b_show02,1,0);
     widget_layout->addWidget(kx_b_b_LineEdit,1,1);
     widget_layout->addWidget(kx_b_b_slider,1,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     kx_b();
@@ -1087,6 +1057,7 @@ void base_process::on_action_base_triggered()
     widget_layout->addWidget(show_max_input_thresh_value,1,0,1,2);
     widget_layout->addWidget(jibenthresh_max_SpinBox,1,2);
     widget_layout->addWidget(jibenthresh_max_slider,1,3);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     jiben_thresh_process();
@@ -1170,6 +1141,7 @@ void base_process::on_actionTHRESH_OTSU_triggered()
     widget_layout->addWidget(show_max_input_THRESH_OTSU_value,1,0);
     widget_layout->addWidget(THRESH_OTSU_max_SpinBox,1,1);
     widget_layout->addWidget(THRESH_OTSU_max_slider,1,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     jiben_THRESH_OTSU_process();
@@ -1262,6 +1234,7 @@ void base_process::on_actionTHRESH_TRIANGLE_triggered()
     widget_layout->addWidget(show_input_THRESH_TRIANGLE_value,1,0);
     widget_layout->addWidget(THRESH_TRIANGLE_max_SpinBox,1,1);
     widget_layout->addWidget(THRESH_TRIANGLE_max_slider,1,2);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     jiben_THRESH_TRIANGLE_process();
@@ -1351,15 +1324,10 @@ void base_process::on_action_adapt_triggered()
     connect(adapt_max_slider, SIGNAL(valueChanged(int)), this, SLOT(jiben_THRESH_adapt_process()));
 
     adapt_blocksize = new QComboBox(ui->widget_for_layout);
-    adapt_blocksize->addItem(tr("邻域范围：3"),3);
-    adapt_blocksize->addItem(tr("邻域范围：5"),5);
-    adapt_blocksize->addItem(tr("邻域范围：7"),7);
-    adapt_blocksize->addItem(tr("邻域范围：9"),9);
-    adapt_blocksize->addItem(tr("邻域范围：11"),11);
-    adapt_blocksize->addItem(tr("邻域范围：13"),13);
-    adapt_blocksize->addItem(tr("邻域范围：15"),15);
-    adapt_blocksize->addItem(tr("邻域范围：17"),17);
-    adapt_blocksize->addItem(tr("邻域范围：19"),19);
+    for(int i = 3;i <= 20;i += 2)
+    {
+        adapt_blocksize->addItem(tr("邻域范围：%1").arg(i),i);
+    }
     connect(adapt_blocksize, SIGNAL(activated(const QString &)),this, SLOT(jiben_THRESH_adapt_process()));
 
     adapt_C_SpinBox = new QSpinBox(ui->widget_for_layout);
@@ -1400,6 +1368,7 @@ void base_process::on_action_adapt_triggered()
     widget_layout->addWidget(jiben_THRESH_adapt_show04,1,3);
     widget_layout->addWidget(adapt_C_SpinBox,1,4);
     widget_layout->addWidget(adapt_C_slider,1,5);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     jiben_THRESH_adapt_process();
@@ -1438,24 +1407,17 @@ void base_process::on_actionSobel_triggered()
     connect(sobel_fangxiang, SIGNAL(activated(const QString &)),this, SLOT(sobel_process()));
 
     sobel_ksize = new QComboBox(ui->widget_for_layout);
-    sobel_ksize->addItem(tr("核尺寸：1"),1);
-    sobel_ksize->addItem(tr("核尺寸：3"),3);
-    sobel_ksize->addItem(tr("核尺寸：5"),5);
-    sobel_ksize->addItem(tr("核尺寸：7"),7);
-    sobel_ksize->addItem(tr("核尺寸：9"),9);
-    sobel_ksize->addItem(tr("核尺寸：11"),11);
-    sobel_ksize->addItem(tr("核尺寸：13"),13);
-    sobel_ksize->addItem(tr("核尺寸：15"),15);
-    sobel_ksize->addItem(tr("核尺寸：17"),17);
-    sobel_ksize->addItem(tr("核尺寸：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        sobel_ksize->addItem(tr("邻域范围：%1").arg(i),i);
+    }
     connect(sobel_ksize, SIGNAL(activated(const QString &)),this, SLOT(sobel_process()));
 
-    sobel_suofangyinzi_Label = new QLabel(tr("    缩放因子："),ui->widget_for_layout);
-    show_liangdu =  new QLabel(tr("    设置亮度："),ui->widget_for_layout);
+    sobel_suofangyinzi_Label = new QLabel(tr("缩放因子："),ui->widget_for_layout);
+    show_liangdu =  new QLabel(tr("设置亮度："),ui->widget_for_layout);
 
-    sobel_suofangyinzi_LineEdit = new QLineEdit(ui->widget_for_layout);
-    sobel_suofangyinzi_LineEdit->setFocusPolicy(Qt::NoFocus);//无法获得焦点，即无法编辑
-    sobel_suofangyinzi_LineEdit->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    sobel_suofangyinzi_show = new QLabel(tr("1.00"),ui->widget_for_layout);
+    sobel_suofangyinzi_show->setStyleSheet("background-color:white");
 
     sobel_suofangyinzi_Slider = new QSlider(ui->widget_for_layout);
     sobel_suofangyinzi_Slider->setOrientation(Qt::Horizontal);//水平方向
@@ -1494,14 +1456,16 @@ void base_process::on_actionSobel_triggered()
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
     widget_layout->addWidget(sobel_fangxiang,0,0);
-    widget_layout->addWidget(sobel_suofangyinzi_Label,0,1);
-    widget_layout->addWidget(sobel_suofangyinzi_LineEdit,0,2);
-    widget_layout->addWidget(sobel_suofangyinzi_Slider,0,3,1,3);
+    widget_layout->addWidget(show_liangdu,0,1);
+    widget_layout->addWidget(sobel_lianagdu_SpinBox,0,2);
+    widget_layout->addWidget(sobel_lianagdu_Slider,0,3,1,3);
     widget_layout->addWidget(sobel_ksize,1,0);
-    widget_layout->addWidget(show_liangdu,1,1);
-    widget_layout->addWidget(sobel_lianagdu_SpinBox,1,2);
-    widget_layout->addWidget(sobel_lianagdu_Slider,1,3,1,3);
+    widget_layout->addWidget(sobel_suofangyinzi_Label,1,1);
+    widget_layout->addWidget(sobel_suofangyinzi_show,1,2);
+    widget_layout->addWidget(sobel_suofangyinzi_Slider,1,3,1,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
+
     sobel_process();
 }
 
@@ -1509,7 +1473,7 @@ void base_process::on_actionSobel_triggered()
 void base_process::sobel_process()
 {
     double temp = double(sobel_suofangyinzi_Slider->value())/10;
-    sobel_suofangyinzi_LineEdit->setText(QString::number(temp,10,2));
+    sobel_suofangyinzi_show->setText(QString::number(temp,10,2));
 
     int dx,dy;
     int sobel_fangxiangvarint = sobel_fangxiang->currentData(Qt::UserRole).toInt();
@@ -1619,6 +1583,7 @@ void base_process::on_actionCanny_triggered()
     widget_layout->addWidget(show_input_thresh2,2,0);
     widget_layout->addWidget(canny_SpinBox_h,2,1);
     widget_layout->addWidget(canny_slider_h,2,2);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     canny_process();
@@ -1668,16 +1633,10 @@ void base_process::on_actionLaplacian_triggered()
     close_other_obj();
 
     Laplacian_ksize = new QComboBox(ui->widget_for_layout);
-    Laplacian_ksize->addItem(tr("核尺寸：1"),1);
-    Laplacian_ksize->addItem(tr("核尺寸：3"),3);
-    Laplacian_ksize->addItem(tr("核尺寸：5"),5);
-    Laplacian_ksize->addItem(tr("核尺寸：7"),7);
-    Laplacian_ksize->addItem(tr("核尺寸：9"),9);
-    Laplacian_ksize->addItem(tr("核尺寸：11"),11);
-    Laplacian_ksize->addItem(tr("核尺寸：13"),13);
-    Laplacian_ksize->addItem(tr("核尺寸：15"),15);
-    Laplacian_ksize->addItem(tr("核尺寸：17"),17);
-    Laplacian_ksize->addItem(tr("核尺寸：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        Laplacian_ksize->addItem(tr("核尺寸：%1 × %1").arg(i),i);
+    }
     connect(Laplacian_ksize, SIGNAL(activated(const QString &)),this, SLOT(Laplacian_process()));
 
     Laplacian_LineEdit = new QLineEdit(ui->widget_for_layout);
@@ -1724,12 +1683,13 @@ void base_process::on_actionLaplacian_triggered()
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
     widget_layout->addWidget(Laplacian_ksize,0,0);
-    widget_layout->addWidget(Laplacian_suofangyinzi_Label,1,0);
-    widget_layout->addWidget(Laplacian_LineEdit,1,1);
-    widget_layout->addWidget(Laplacian_suofangyinzi_Slider,1,2,1,3);
-    widget_layout->addWidget(Laplacian_lianagdu_Label,2,0);
-    widget_layout->addWidget(Laplacian_lianagdu_SpinBox,2,1);
-    widget_layout->addWidget(Laplacian_lianagdu_Slider,2,2,1,3);
+    widget_layout->addWidget(Laplacian_lianagdu_Label,1,0);
+    widget_layout->addWidget(Laplacian_lianagdu_SpinBox,1,1);
+    widget_layout->addWidget(Laplacian_lianagdu_Slider,1,2,1,3);
+    widget_layout->addWidget(Laplacian_suofangyinzi_Label,2,0);
+    widget_layout->addWidget(Laplacian_LineEdit,2,1);
+    widget_layout->addWidget(Laplacian_suofangyinzi_Slider,2,2,1,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     Laplacian_process();
@@ -1799,8 +1759,8 @@ void base_process::on_actionScharr_triggered()
     connect(Scharr_lianagdu_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(Scharr_process()));
     connect(Scharr_lianagdu_Slider, SIGNAL(valueChanged(int)), this, SLOT(Scharr_process()));
 
-    Scharr_lianagdu_Label =  new QLabel(tr(" 设置亮度："),ui->widget_for_layout);
-    Scharr_suofangyinzi_Label = new QLabel(tr(" 缩放因子："),ui->widget_for_layout);
+    Scharr_lianagdu_Label =  new QLabel(tr("设置亮度："),ui->widget_for_layout);
+    Scharr_suofangyinzi_Label = new QLabel(tr("缩放因子："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -1809,12 +1769,13 @@ void base_process::on_actionScharr_triggered()
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
     widget_layout->addWidget(Scharr_fangxiang,0,0);
-    widget_layout->addWidget(Scharr_suofangyinzi_Label,1,0);
-    widget_layout->addWidget(Scharr_suofangyinzi_LineEdit,1,1);
-    widget_layout->addWidget(Scharr_suofangyinzi_Slider,1,2,1,3);
-    widget_layout->addWidget(Scharr_lianagdu_Label,2,0);
-    widget_layout->addWidget(Scharr_lianagdu_SpinBox,2,1);
-    widget_layout->addWidget(Scharr_lianagdu_Slider,2,2,1,3);
+    widget_layout->addWidget(Scharr_lianagdu_Label,1,0);
+    widget_layout->addWidget(Scharr_lianagdu_SpinBox,1,1);
+    widget_layout->addWidget(Scharr_lianagdu_Slider,1,2,1,3);
+    widget_layout->addWidget(Scharr_suofangyinzi_Label,2,0);
+    widget_layout->addWidget(Scharr_suofangyinzi_LineEdit,2,1);
+    widget_layout->addWidget(Scharr_suofangyinzi_Slider,2,2,1,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     Scharr_process();
@@ -1876,13 +1837,17 @@ void base_process::on_action_color_lvjing_triggered()
     color_xiaoguo->addItem(tr("B通道-彩色"),13);
     connect(color_xiaoguo, SIGNAL(activated(const QString &)),this, SLOT(color_lvjing_process()));
 
+    color_show = new QLabel(tr("颜色转换类型："),ui->widget_for_layout);
+
     if(widget_layout != NULL)
     {
         delete widget_layout;
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(color_xiaoguo,0,0);
+    widget_layout->addWidget(color_show,0,0);
+    widget_layout->addWidget(color_xiaoguo,0,1);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     color_lvjing_process();
@@ -2002,7 +1967,7 @@ void base_process::color_lvjing_process()
     }
 }
 
-//色度图
+//彩色映射
 void base_process::on_action_change_secaikongjian_triggered()
 {
     if (srcImage.empty())
@@ -2028,19 +1993,23 @@ void base_process::on_action_change_secaikongjian_triggered()
     color_kongjianzhuanhuan->addItem(tr("COLORMAP_PARULA"),COLORMAP_PARULA);
     connect(color_kongjianzhuanhuan, SIGNAL(activated(const QString &)),this, SLOT(color_kongjianzhuanhuan_process()));
 
+    color_kongjianzhuanhuan_show = new QLabel(tr("彩色色谱："),ui->widget_for_layout);
+
     if(widget_layout != NULL)
     {
         delete widget_layout;
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(color_kongjianzhuanhuan,0,0);
+    widget_layout->addWidget(color_kongjianzhuanhuan_show,0,0);
+    widget_layout->addWidget(color_kongjianzhuanhuan,0,1);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     color_kongjianzhuanhuan_process();
 }
 
-//色度图
+//彩色映射
 void base_process::color_kongjianzhuanhuan_process()
 {
     applyColorMap(srcImage,dstImage,color_kongjianzhuanhuan->currentData(Qt::UserRole).toInt());
@@ -2083,18 +2052,15 @@ void base_process::on_action_shougonghua_2_triggered()
     connect(shougonghua_slider, SIGNAL(valueChanged(int)), this, SLOT(change_lvjing_shougonghua()));
     connect(shougonghua_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(change_lvjing_shougonghua()));
 
-    show_shougonghuayuzhi =  new QLabel(tr(" 设置阈值："),ui->widget_for_layout);
+    show_shougonghuayuzhi =  new QLabel(tr("设置阈值："),ui->widget_for_layout);
+    show_gaosi =  new QLabel(tr("高斯核尺寸："),ui->widget_for_layout);
+    show_gaosi->hide();
 
     sumiao_gauss_size = new QComboBox(ui->widget_for_layout);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：3"),3);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：5"),5);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：7"),7);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：9"),9);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：11"),11);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：13"),13);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：15"),15);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：17"),17);
-    sumiao_gauss_size->addItem(tr("高斯核尺寸：19"),19);
+    for(int i = 1;i <= 20;i += 2)
+    {
+        sumiao_gauss_size->addItem(tr("%1 × %1").arg(i),i);
+    }
     sumiao_gauss_size->hide();
     connect(sumiao_gauss_size, SIGNAL(activated(const QString &)),this, SLOT(change_lvjing_shougonghua()));
 
@@ -2108,7 +2074,9 @@ void base_process::on_action_shougonghua_2_triggered()
     widget_layout->addWidget(show_shougonghuayuzhi,0,1);
     widget_layout->addWidget(shougonghua_SpinBox,0,2);
     widget_layout->addWidget(shougonghua_slider,0,3);
-    widget_layout->addWidget(sumiao_gauss_size,0,4);
+    widget_layout->addWidget(show_gaosi,0,4);
+    widget_layout->addWidget(sumiao_gauss_size,0,5);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     change_lvjing_shougonghua();
@@ -2128,6 +2096,7 @@ void base_process::change_lvjing_shougonghua()
         show_shougonghuayuzhi->show();
 
         sumiao_gauss_size->hide();
+        show_gaosi->hide();
     }
     else if(select_shougonghuavarint == 3)
     {
@@ -2136,6 +2105,7 @@ void base_process::change_lvjing_shougonghua()
         show_shougonghuayuzhi->hide();
 
         sumiao_gauss_size->show();
+        show_gaosi->show();
     }
 
     if(select_shougonghuavarint == 1)
@@ -2266,13 +2236,17 @@ void base_process::on_action_art_triggered()
     select_art->addItem(tr("老照片"),9);
     connect(select_art, SIGNAL(activated(const QString &)),this, SLOT(art_process()));
 
+    show_art =  new QLabel(tr("滤镜类型："),ui->widget_for_layout);
+
     if(widget_layout != NULL)
     {
         delete widget_layout;
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(select_art,0,0);
+    widget_layout->addWidget(show_art,0,0);
+    widget_layout->addWidget(select_art,0,1);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     art_process();
@@ -2592,13 +2566,17 @@ void base_process::on_action_light_triggered()
     select_light->addItem(tr("高反差保留"),4);
     connect(select_light, SIGNAL(activated(const QString &)),this, SLOT(light_process()));
 
+    show_light =  new QLabel(tr("滤镜类型："),ui->widget_for_layout);
+
     if(widget_layout != NULL)
     {
         delete widget_layout;
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(select_light,0,0);
+    widget_layout->addWidget(show_light,0,0);
+    widget_layout->addWidget(select_light,0,1);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     light_process();
@@ -2739,7 +2717,7 @@ void base_process::on_action_diaoke_triggered()
     connect(diaoke_canshu_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(diaoke_process()));
     connect(diaoke_canshu_slider, SIGNAL(valueChanged(int)), this, SLOT(diaoke_process()));
 
-    diaoke_lab = new QLabel(tr(" 设置亮度："),ui->widget_for_layout);
+    diaoke_lab = new QLabel(tr("设置亮度："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -2751,6 +2729,7 @@ void base_process::on_action_diaoke_triggered()
     widget_layout->addWidget(diaoke_lab,0,1);
     widget_layout->addWidget(diaoke_canshu_SpinBox,0,2);
     widget_layout->addWidget(diaoke_canshu_slider,0,3);
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     diaoke_process();
@@ -2846,7 +2825,7 @@ void base_process::on_action_teshuxiaoguo_triggered()
     teshuxiaoguo_canshu_slider->setMinimum(1);
     teshuxiaoguo_canshu_slider->setMaximum(300);
     teshuxiaoguo_canshu_slider->setSingleStep(10);//步长 动一下移动的距离
-    teshuxiaoguo_canshu_slider->setTickInterval(10); // 设置刻度间隔
+    teshuxiaoguo_canshu_slider->setTickInterval(20); // 设置刻度间隔
     teshuxiaoguo_canshu_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
     teshuxiaoguo_canshu_slider->setValue(200);//设置一个默认值
 
@@ -2918,7 +2897,7 @@ void base_process::on_action_teshuxiaoguo_triggered()
     widget_layout->addWidget(teshuxiaoguo_lab_y,2,0);
     widget_layout->addWidget(teshuxiaoguo_center_y_SpinBox,2,1);
     widget_layout->addWidget(teshuxiaoguo_center_y_slider,2,2,1,2);
-
+    widget_layout->setAlignment(Qt::AlignHCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     teshuxiaoguo_process();
@@ -2957,7 +2936,7 @@ void base_process::teshuxiaoguo_process()
     {
         teshuxiaoguo_canshu_SpinBox->setMaximum(sqrtf(width*width+heigh*heigh)/2);
         teshuxiaoguo_canshu_slider->setMaximum(sqrtf(width*width+heigh*heigh)/2);
-        teshuxiaoguo_canshu_slider->setTickInterval(10); // 设置刻度间隔
+        teshuxiaoguo_canshu_slider->setTickInterval(sqrtf(width*width+heigh*heigh)/80); // 设置刻度间隔
         teshuxiaoguo_lab->setText(tr("凸透镜放大力度："));
     }
     else if(teshuxiaoguo_selectvarint == 2)
@@ -3473,6 +3452,7 @@ void base_process::on_action_lunkuojiance_triggered()
     widget_layout->addWidget(lunkuojiance_draw_AreaRect,6,1);
     widget_layout->addWidget(lunkuojiance_draw_circle,6,2);
     widget_layout->addWidget(lunkuojiance_draw_Ellipse,6,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     lunkuojiance_process();
@@ -3833,6 +3813,7 @@ void base_process::on_action_huofu_line_triggered()
     widget_layout->addWidget(Hough_line_thickness,5,1);
     widget_layout->addWidget(Hough_line_color,5,2);
     widget_layout->addWidget(Hough_line_draw_in_src,5,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     Hough_line_process();
@@ -4046,6 +4027,7 @@ void base_process::on_action_huofu_yuan_triggered()
     widget_layout->addWidget(Hough_circles_show07,5,0);
     widget_layout->addWidget(Hough_circles_thickness,5,1);
     widget_layout->addWidget(Hough_Radius_draw_in_src,5,2,1,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     Hough_circle_process();
@@ -4123,20 +4105,20 @@ void base_process::on_action_jiaodianjiance_triggered()
     Features_pixel_show03 = new QLabel(tr("角点间的最小距离："),ui->widget_for_layout);
     Features_pixel_show04 = new QLabel(tr("检测角点时参与计算的区域大小："),ui->widget_for_layout);
     Features_pixel_show05 = new QLabel(tr("绘制圆线的粗细："),ui->widget_for_layout);
-    Features_pixel_show06 = new QLabel(tr("    绘制圆的半径："),ui->widget_for_layout);
+    Features_pixel_show06 = new QLabel(tr("     绘制圆的半径："),ui->widget_for_layout);
     Features_pixel_show07 = new QLabel(tr("角点检测类型："),ui->widget_for_layout);
 
     Features_pixel_maxCorners_SpinBox = new QSpinBox(ui->widget_for_layout);
     Features_pixel_maxCorners_SpinBox->setMinimum(50);
-    Features_pixel_maxCorners_SpinBox->setMaximum(1000);
+    Features_pixel_maxCorners_SpinBox->setMaximum(5000);
     Features_pixel_maxCorners_SpinBox->setValue(100);//设置一个默认值
 
     Features_pixel_maxCorners_slider = new QSlider(ui->widget_for_layout);
     Features_pixel_maxCorners_slider->setOrientation(Qt::Horizontal);//水平方向
     Features_pixel_maxCorners_slider->setMinimum(50);
-    Features_pixel_maxCorners_slider->setMaximum(1000);
+    Features_pixel_maxCorners_slider->setMaximum(5000);
     Features_pixel_maxCorners_slider->setSingleStep(50);//步长 动一下移动的距离
-    Features_pixel_maxCorners_slider->setTickInterval(25); // 设置刻度间隔
+    Features_pixel_maxCorners_slider->setTickInterval(100); // 设置刻度间隔
     Features_pixel_maxCorners_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
     Features_pixel_maxCorners_slider->setValue(100);//设置一个默认值
 
@@ -4253,6 +4235,7 @@ void base_process::on_action_jiaodianjiance_triggered()
     widget_layout->addWidget(Features_pixel_line_cuxi_SpinBox,5,2);
     widget_layout->addWidget(Features_pixel_show06,5,3);
     widget_layout->addWidget(Features_pixel_line_banjing_SpinBox,5,4);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     Features_pixel();
@@ -4417,6 +4400,7 @@ void base_process::on_actionK_Means_triggered()
     widget_layout->addWidget(kmeans_time_SpinBox,1,1);
     widget_layout->addWidget(kmeans_time_slider,1,2);
     widget_layout->addWidget(kmeans_isok,1,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     process_keans();
@@ -4537,8 +4521,8 @@ void base_process::dropEvent(QDropEvent* event)
 void base_process::on_action_help_triggered()
 {    
     QMessageBox::information(this,"说明","基于Qt5.9 & OpenCV3.0"
-                                       "\n版本：1.9.4"
-                                       "\n更新时间：2019年2月12日"
+                                       "\n版本：1.9.5"
+                                       "\n更新时间：2019年2月13日"
                                        "\n作者QQ：709579619 | 微信：siyuan7095"
                                        "\n本软件不定时更新，更新发布地址："
                                        "\nhttps://github.com/siyuan7095/picture_process");

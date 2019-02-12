@@ -69,15 +69,19 @@ public:
     //均值滤波
     QComboBox* blursize_w;
     QComboBox* blursize_h;
+    QLabel* blur_show;
     //方框滤波
     QComboBox* boxFiltersize_w;
     QComboBox* boxFiltersize_h;
+    QLabel* boxFilter_show;
     QCheckBox* isNormalize;
     //高斯滤波
     QComboBox* gusssizehight;
     QComboBox* gausssizewith;
+    QLabel* gauss_show;
     //中值滤波
     QComboBox* mediansize;
+    QLabel* median_show;
     //双边滤波
     QSlider* colorsigma_slider;//颜色范围标准差
     QSpinBox* colorsigma_SpinBox;//
@@ -158,7 +162,7 @@ public:
     //边缘检测 sobel
     QComboBox* sobel_fangxiang;
     QComboBox* sobel_ksize;
-    QLineEdit* sobel_suofangyinzi_LineEdit;
+    QLabel* sobel_suofangyinzi_show;
     QSlider* sobel_suofangyinzi_Slider;
     QLabel* sobel_suofangyinzi_Label;
     QSlider* sobel_lianagdu_Slider;
@@ -195,18 +199,23 @@ public:
 
     //滤镜 颜色效果
     QComboBox* color_xiaoguo;
+    QLabel* color_show;
     //色彩空间转换
     QComboBox* color_kongjianzhuanhuan;
+    QLabel* color_kongjianzhuanhuan_show;
     //滤镜 手工画
     QComboBox* select_shougonghua;
     QSpinBox* shougonghua_SpinBox;
     QSlider* shougonghua_slider;
     QLabel* show_shougonghuayuzhi;
+    QLabel* show_gaosi;
     QComboBox* sumiao_gauss_size;
     //艺术效果
     QComboBox* select_art;
+    QLabel* show_art;
     //光线效果
     QComboBox* select_light;
+    QLabel* show_light;
     //雕刻
     QComboBox*select_diaoke_func;
     QSpinBox* diaoke_canshu_SpinBox;
