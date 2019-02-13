@@ -43,6 +43,8 @@ namespace Ui {
 class base_process;
 }
 
+static int save_num = 1;//记录同一张图片的保存次数
+
 class base_process : public QMainWindow
 {
     Q_OBJECT
@@ -51,12 +53,14 @@ class base_process : public QMainWindow
 public:
     explicit base_process(QWidget *parent = 0);
     ~base_process();
-    //变量
+    //变量    
     Mat srcImage;//图像
     Mat dstImage;
     Mat srcImage_copy;//还原图像时使用
     QImage img;//QT的图像对象
     QString imgfilename;//当前处理的图像的文件名
+    QString openfilepath;//保存上次打开图片的目录
+    QString savefilepath;//保存上次保存图片的目录
 
     //形态学操作
     QLabel* element_show_01;

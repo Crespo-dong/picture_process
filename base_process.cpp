@@ -24,7 +24,7 @@ void base_process::on_action_openpic_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("打开图片文件"),
-                                                    "/", //QDir::currentPath(),//默认路径，静态方法调用，使用程序运行的当前路径
+                                                    openfilepath.isNull() ? "/" : openfilepath, //QDir::currentPath(),//默认路径，静态方法调用，使用程序运行的当前路径
                                                     tr("Image File(*.bmp *.jpg *.jpeg *.png)"));
 
     qDebug()<<tr("源图像路径：")<<fileName;
@@ -36,7 +36,11 @@ void base_process::on_action_openpic_triggered()
 
     QFile *file = new QFile;
     file->setFileName(fileName);
-    imgfilename = QFileInfo(fileName).baseName();
+    QFileInfo filetemp = QFileInfo(fileName);
+    imgfilename = filetemp.baseName();
+    openfilepath = filetemp.path();
+    savefilepath.clear();
+
     QTextCodec *code = QTextCodec::codecForName("gb18030");//确保中文不乱码
     std::string name = code->fromUnicode(fileName).data();
     //读取文件
@@ -55,6 +59,7 @@ void base_process::on_action_openpic_triggered()
     img = img.scaled(ui->labelsrc->width(), ui->labelsrc->height());
     ui->labelsrc->setPixmap(QPixmap::fromImage(img));
     qDebug()<<"srcImage type "<<srcImage.type();
+    save_num = 1;
 }
 
 //把处理后的图像dstImage放到labeldst标签显示
@@ -95,10 +100,9 @@ void base_process::on_action_savedst_triggered()
         return;
     }
 
-    static int num = 1;
     QString saveFileName = QFileDialog::getSaveFileName(this,
                                                         tr("保存文件"),
-                                                        "/" + imgfilename + tr("-效果图-%1.png").arg(num),
+                                                        QString(savefilepath.isNull() ? "/" : savefilepath) + "/" + imgfilename + tr("-效果图-%1.png").arg(save_num),
                                                         tr("image(*.png);;image(*.jpg);;image(*.jpeg);;image(*.bmp)"));
     if(saveFileName.isEmpty())//比如打开选择对话框了随即点取消 saveFileName为空
     {
@@ -107,6 +111,8 @@ void base_process::on_action_savedst_triggered()
     QTextCodec *code = QTextCodec::codecForName("gb18030");//确保保存中文名不乱码
     std::string fileAsSave = code->fromUnicode(saveFileName).data();
 
+    QFileInfo filetemp = QFileInfo(saveFileName);
+    savefilepath = filetemp.path();
     //string fileAsSave = saveFileName.toStdString();
     //格式不同 保存方法不同
     if(dstImage.type() == CV_8UC3)//三通道图
@@ -120,7 +126,7 @@ void base_process::on_action_savedst_triggered()
         compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
         imwrite(fileAsSave,dstImage,compression_params);
     }
-    num++;
+    save_num++;
 }
 
 //清除图像
@@ -949,8 +955,8 @@ void base_process::on_action_kx_b_triggered()
     kx_b_b_LineEdit->setFocusPolicy(Qt::NoFocus);//无法获得焦点，即无法编辑
     kx_b_b_LineEdit->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
 
-    kx_b_show01 = new QLabel(tr("k："),ui->widget_for_layout);
-    kx_b_show02 = new QLabel(tr("b："),ui->widget_for_layout);
+    kx_b_show01 = new QLabel(tr("缩放因数k："),ui->widget_for_layout);
+    kx_b_show02 = new QLabel(tr("偏移量b："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -1288,8 +1294,8 @@ void base_process::on_action_adapt_triggered()
     }
     close_other_obj();
 
-    jiben_THRESH_adapt_show01 = new QLabel(tr("自适应阈值算法："),ui->widget_for_layout);
-    jiben_THRESH_adapt_show02 = new QLabel(tr("阈值类型："),ui->widget_for_layout);
+    jiben_THRESH_adapt_show01 = new QLabel(tr("                  自适应阈值算法："),ui->widget_for_layout);
+    jiben_THRESH_adapt_show02 = new QLabel(tr("                  阈值类型："),ui->widget_for_layout);
     jiben_THRESH_adapt_show03 = new QLabel(tr("设置最大阈值："),ui->widget_for_layout);
     jiben_THRESH_adapt_show04 = new QLabel(tr("偏移常量："),ui->widget_for_layout);
 
@@ -1357,18 +1363,18 @@ void base_process::on_action_adapt_triggered()
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(jiben_THRESH_adapt_show02,0,0);
-    widget_layout->addWidget(jiben_THRESH_adapt_type,0,1);
-    widget_layout->addWidget(jiben_THRESH_adapt_show03,0,2);
-    widget_layout->addWidget(adapt_max_SpinBox,0,3);
-    widget_layout->addWidget(adapt_max_slider,0,4,1,2);
-    widget_layout->addWidget(jiben_THRESH_adapt_show01,1,0);
-    widget_layout->addWidget(jiben_THRESH_adapt_meth,1,1);
-    widget_layout->addWidget(adapt_blocksize,1,2);
-    widget_layout->addWidget(jiben_THRESH_adapt_show04,1,3);
-    widget_layout->addWidget(adapt_C_SpinBox,1,4);
-    widget_layout->addWidget(adapt_C_slider,1,5);
-    widget_layout->setAlignment(Qt::AlignHCenter);
+    widget_layout->addWidget(adapt_blocksize,0,0);
+    widget_layout->addWidget(jiben_THRESH_adapt_show02,0,1);
+    widget_layout->addWidget(jiben_THRESH_adapt_type,0,2);
+    widget_layout->addWidget(jiben_THRESH_adapt_show01,0,3);
+    widget_layout->addWidget(jiben_THRESH_adapt_meth,0,4);
+    widget_layout->addWidget(jiben_THRESH_adapt_show03,1,0);
+    widget_layout->addWidget(adapt_max_SpinBox,1,1);
+    widget_layout->addWidget(adapt_max_slider,1,2,1,3);
+    widget_layout->addWidget(jiben_THRESH_adapt_show04,2,0);
+    widget_layout->addWidget(adapt_C_SpinBox,2,1);
+    widget_layout->addWidget(adapt_C_slider,2,2,1,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     jiben_THRESH_adapt_process();
@@ -1456,13 +1462,13 @@ void base_process::on_actionSobel_triggered()
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
     widget_layout->addWidget(sobel_fangxiang,0,0);
-    widget_layout->addWidget(show_liangdu,0,1);
-    widget_layout->addWidget(sobel_lianagdu_SpinBox,0,2);
-    widget_layout->addWidget(sobel_lianagdu_Slider,0,3,1,3);
-    widget_layout->addWidget(sobel_ksize,1,0);
-    widget_layout->addWidget(sobel_suofangyinzi_Label,1,1);
-    widget_layout->addWidget(sobel_suofangyinzi_show,1,2);
-    widget_layout->addWidget(sobel_suofangyinzi_Slider,1,3,1,3);
+    widget_layout->addWidget(sobel_ksize,0,1);
+    widget_layout->addWidget(show_liangdu,1,0);
+    widget_layout->addWidget(sobel_lianagdu_SpinBox,1,1);
+    widget_layout->addWidget(sobel_lianagdu_Slider,1,2,1,5);
+    widget_layout->addWidget(sobel_suofangyinzi_Label,2,0);
+    widget_layout->addWidget(sobel_suofangyinzi_show,2,1);
+    widget_layout->addWidget(sobel_suofangyinzi_Slider,2,2,1,5);
     widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
@@ -1685,10 +1691,10 @@ void base_process::on_actionLaplacian_triggered()
     widget_layout->addWidget(Laplacian_ksize,0,0);
     widget_layout->addWidget(Laplacian_lianagdu_Label,1,0);
     widget_layout->addWidget(Laplacian_lianagdu_SpinBox,1,1);
-    widget_layout->addWidget(Laplacian_lianagdu_Slider,1,2,1,3);
+    widget_layout->addWidget(Laplacian_lianagdu_Slider,1,2,1,5);
     widget_layout->addWidget(Laplacian_suofangyinzi_Label,2,0);
     widget_layout->addWidget(Laplacian_LineEdit,2,1);
-    widget_layout->addWidget(Laplacian_suofangyinzi_Slider,2,2,1,3);
+    widget_layout->addWidget(Laplacian_suofangyinzi_Slider,2,2,1,5);
     widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
@@ -1771,10 +1777,10 @@ void base_process::on_actionScharr_triggered()
     widget_layout->addWidget(Scharr_fangxiang,0,0);
     widget_layout->addWidget(Scharr_lianagdu_Label,1,0);
     widget_layout->addWidget(Scharr_lianagdu_SpinBox,1,1);
-    widget_layout->addWidget(Scharr_lianagdu_Slider,1,2,1,3);
+    widget_layout->addWidget(Scharr_lianagdu_Slider,1,2,1,5);
     widget_layout->addWidget(Scharr_suofangyinzi_Label,2,0);
     widget_layout->addWidget(Scharr_suofangyinzi_LineEdit,2,1);
-    widget_layout->addWidget(Scharr_suofangyinzi_Slider,2,2,1,3);
+    widget_layout->addWidget(Scharr_suofangyinzi_Slider,2,2,1,5);
     widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
@@ -2887,17 +2893,17 @@ void base_process::on_action_teshuxiaoguo_triggered()
         widget_layout = NULL;
     }
     widget_layout = new QGridLayout(ui->widget_for_layout);
-    widget_layout->addWidget(teshuxiaoguo_select,0,0);
-    widget_layout->addWidget(teshuxiaoguo_lab,0,1);
-    widget_layout->addWidget(teshuxiaoguo_canshu_SpinBox,0,2);
-    widget_layout->addWidget(teshuxiaoguo_canshu_slider,0,3);
-    widget_layout->addWidget(teshuxiaoguo_lab_x,1,0);
-    widget_layout->addWidget(teshuxiaoguo_center_x_SpinBox,1,1);
-    widget_layout->addWidget(teshuxiaoguo_center_x_slider,1,2,1,2);
-    widget_layout->addWidget(teshuxiaoguo_lab_y,2,0);
-    widget_layout->addWidget(teshuxiaoguo_center_y_SpinBox,2,1);
-    widget_layout->addWidget(teshuxiaoguo_center_y_slider,2,2,1,2);
-    widget_layout->setAlignment(Qt::AlignHCenter);
+    widget_layout->addWidget(teshuxiaoguo_select,0,0,1,2);
+    widget_layout->addWidget(teshuxiaoguo_lab,1,0);
+    widget_layout->addWidget(teshuxiaoguo_canshu_SpinBox,1,1);
+    widget_layout->addWidget(teshuxiaoguo_canshu_slider,1,2,1,5);
+    widget_layout->addWidget(teshuxiaoguo_lab_x,2,0);
+    widget_layout->addWidget(teshuxiaoguo_center_x_SpinBox,2,1);
+    widget_layout->addWidget(teshuxiaoguo_center_x_slider,2,2,1,5);
+    widget_layout->addWidget(teshuxiaoguo_lab_y,3,0);
+    widget_layout->addWidget(teshuxiaoguo_center_y_SpinBox,3,1);
+    widget_layout->addWidget(teshuxiaoguo_center_y_slider,3,2,1,5);
+    widget_layout->setAlignment(Qt::AlignVCenter);
     ui->widget_for_layout->setLayout(widget_layout);
 
     teshuxiaoguo_process();
@@ -4495,9 +4501,14 @@ void base_process::dropEvent(QDropEvent* event)
         return;
     }
     close_other_obj();
+
     QFile *file = new QFile;
     file->setFileName(fileName);
-    imgfilename = QFileInfo(fileName).baseName();
+    QFileInfo filetemp = QFileInfo(fileName);
+    imgfilename = filetemp.baseName();
+    openfilepath = filetemp.path();
+    savefilepath.clear();
+
     QTextCodec *code = QTextCodec::codecForName("gb18030");//确保中文不乱码
     std::string name = code->fromUnicode(fileName).data();
     //读取文件
@@ -4515,6 +4526,7 @@ void base_process::dropEvent(QDropEvent* event)
     ui->labeldst->clear();
     img = img.scaled(ui->labelsrc->width(), ui->labelsrc->height());
     ui->labelsrc->setPixmap(QPixmap::fromImage(img));
+    save_num = 1;
 }
 
 //关于
