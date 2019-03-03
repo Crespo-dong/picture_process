@@ -77,9 +77,9 @@
    <widget class="QCheckBox" name="is_single_process">
     <property name="geometry">
      <rect>
-      <x>790</x>
+      <x>770</x>
       <y>460</y>
-      <width>91</width>
+      <width>121</width>
       <height>31</height>
      </rect>
     </property>
@@ -87,37 +87,37 @@
      <string>连续处理图像</string>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QLabel" name="labelsrctxt">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>440</y>
-      <width>811</width>
-      <height>24</height>
+      <x>21</x>
+      <y>431</y>
+      <width>72</width>
+      <height>26</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="labelsrctxt">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;源图像&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelsrctxt_2">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;效果图像&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;源图像&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelsrctxt_2">
+    <property name="geometry">
+     <rect>
+      <x>459</x>
+      <y>431</y>
+      <width>96</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;效果图像&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -126,7 +126,7 @@
      <x>0</x>
      <y>0</y>
      <width>912</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -221,6 +221,7 @@
      <string>图像分割</string>
     </property>
     <addaction name="actionK_Means"/>
+    <addaction name="action_floodFill"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
@@ -417,6 +418,11 @@
   <action name="action_kx_b">
    <property name="text">
     <string>线性变换：y = |kx + b|</string>
+   </property>
+  </action>
+  <action name="action_floodFill">
+   <property name="text">
+    <string>漫水填充（随机种子点）</string>
    </property>
   </action>
  </widget>

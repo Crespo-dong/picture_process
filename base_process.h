@@ -36,6 +36,7 @@
 #include <QLineEdit>
 #include <QTime>
 #include <QFileInfo>
+#include <QDesktopWidget>
 
 using namespace std;
 using namespace cv;
@@ -334,6 +335,16 @@ public:
     QLabel* kmeans_show02;
     QLabel* kmeans_show03;
     QPushButton* kmeans_isok;
+
+    //漫水填充
+    QLabel* floodfill_show01;
+    QLabel* floodfill_show02;
+    QLabel* floodfill_show03;
+    QSpinBox* floodfill_lowDifference_SpinBox;
+    QSlider* floodfill_lowDifference_slider;
+    QSpinBox* floodfill_upDifference_SpinBox;
+    QSlider* floodfill_upDifference_slider;
+    QComboBox* floodfill_liantongxing;
     //布局
     QGridLayout* widget_layout;
     //函数
@@ -476,6 +487,10 @@ private slots:
     void on_action_kx_b_triggered();
 
     void kx_b();
+
+    void on_action_floodFill_triggered();
+
+    void do_floodfill();
 
 private:
     Ui::base_process *ui;

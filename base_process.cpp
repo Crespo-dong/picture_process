@@ -10,6 +10,37 @@ base_process::base_process(QWidget *parent) :
     //设置边框颜色
 //    ui->labelsrc->setStyleSheet("border:2px solid red;");
 //    ui->labeldst->setStyleSheet("border:2px solid red;");
+
+    //当前机器的屏幕的尺寸
+    QRect desk_rect = QApplication::desktop()->availableGeometry();
+    //根据屏幕尺寸调节窗口和控件的尺寸、位置
+    setFixedSize(int(desk_rect.width() * 0.83), int(desk_rect.height() * 0.9));
+    ui->labelsrc->setGeometry(int(width() * 0.01),
+                              15,
+                              int(desk_rect.width() * 0.4),
+                              int(desk_rect.height() * 0.5));
+    ui->labeldst->setGeometry(int(width() * 0.51),
+                              15,
+                              int(desk_rect.width() * 0.4),
+                              int(desk_rect.height() * 0.5));
+    ui->labelsrctxt->setGeometry(QRect(int(width() * 0.01),
+                                            int(desk_rect.height() * 0.51),
+                                            int(desk_rect.width() * 0.4),
+                                            int(desk_rect.height() * 0.05)));
+    ui->labelsrctxt_2->setGeometry(QRect(int(width() * 0.51),
+                                            int(desk_rect.height() * 0.51),
+                                            int(desk_rect.width() * 0.4),
+                                            int(desk_rect.height() * 0.05)));
+    ui->is_single_process->setGeometry(QRect(int(width() * 0.9),
+                                             int(desk_rect.height() * 0.53),
+                                             int(desk_rect.width() * 0.1),
+                                             int(desk_rect.height() * 0.05)));
+    ui->is_single_process->raise();//确保此控件不被其他控件覆盖
+    ui->widget_for_layout->setGeometry(QRect(int(width() * 0.01),
+                                             int(desk_rect.height() * 0.46),
+                                             int(desk_rect.width() * 0.82),
+                                             int(desk_rect.height() * 0.45)));
+
     setAcceptDrops(true);//窗口可接收拖放事件
     widget_layout = new QGridLayout(ui->widget_for_layout);
 }
@@ -178,7 +209,7 @@ void base_process::on_action_select_scope_triggered()
     }
     close_other_obj();
 
-    element_show_01 = new QLabel(tr("操作核类型："),ui->widget_for_layout);
+    element_show_01 = new QLabel(tr("形态学处理--操作核类型："),ui->widget_for_layout);
 
     element_type = new QComboBox(ui->widget_for_layout);
     element_type->addItem(tr("矩形"),cv::MORPH_RECT);
@@ -268,7 +299,7 @@ void base_process::on_action_bulr_triggered()
     }
     connect(blursize_h, SIGNAL(activated(const QString &)),this, SLOT(blur_process_pic()));
 
-    blur_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
+    blur_show = new QLabel(tr("均值滤波--操作核尺寸："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -321,7 +352,7 @@ void base_process::on_action_boxFilter_triggered()
     isNormalize->setChecked(true);//选中
     connect(isNormalize, SIGNAL(stateChanged(int)), this, SLOT(boxFilter_process_pic()));
 
-    boxFilter_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
+    boxFilter_show = new QLabel(tr("方框滤波--操作核尺寸："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -385,7 +416,7 @@ void base_process::on_action_GaussFilter_triggered()
     }
     connect(gusssizehight, SIGNAL(activated(const QString &)),this, SLOT(gussFilter_process_pic()));
 
-    gauss_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
+    gauss_show = new QLabel(tr("高斯滤波--操作核尺寸："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -426,7 +457,7 @@ void base_process::on_action_midian_triggered()
     }
     connect(mediansize, SIGNAL(activated(const QString &)),this, SLOT(median_process_pic()));
 
-    median_show = new QLabel(tr("操作核尺寸："),ui->widget_for_layout);
+    median_show = new QLabel(tr("中值滤波--操作核尺寸："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -570,7 +601,7 @@ void base_process::on_action_tiaojie_liangdu_duibidu_triggered()
     liangdu_slider->setMinimum(-200);
     liangdu_slider->setMaximum(200);
     liangdu_slider->setSingleStep(10);//步长 动一下移动的距离
-    liangdu_slider->setTickInterval(5); // 设置刻度间隔
+    liangdu_slider->setTickInterval(10); // 设置刻度间隔
     liangdu_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
     liangdu_slider->setValue(0);//设置一个默认值
 
@@ -637,14 +668,14 @@ void base_process::on_action_warpAffine_triggered()
     close_other_obj();
 
     warpAffine_center_x_SpinBox = new QSpinBox(ui->widget_for_layout);
-    warpAffine_center_x_SpinBox->setMinimum(1);
+    warpAffine_center_x_SpinBox->setMinimum(0);
     warpAffine_center_x_SpinBox->setMaximum(99);
     warpAffine_center_x_SpinBox->setValue(50);//设置一个默认值
     warpAffine_center_x_SpinBox->setPrefix("0.");//前缀
 
     warpAffine_center_x_slider = new QSlider(ui->widget_for_layout);
     warpAffine_center_x_slider->setOrientation(Qt::Horizontal);//水平方向
-    warpAffine_center_x_slider->setMinimum(1);
+    warpAffine_center_x_slider->setMinimum(0);
     warpAffine_center_x_slider->setMaximum(99);
     warpAffine_center_x_slider->setSingleStep(10);//步长 动一下移动的距离
     warpAffine_center_x_slider->setTickInterval(5); // 设置刻度间隔
@@ -658,14 +689,14 @@ void base_process::on_action_warpAffine_triggered()
     connect(warpAffine_center_x_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(process_warpAffine()));
 
     warpAffine_center_y_SpinBox = new QSpinBox(ui->widget_for_layout);
-    warpAffine_center_y_SpinBox->setMinimum(1);
+    warpAffine_center_y_SpinBox->setMinimum(0);
     warpAffine_center_y_SpinBox->setMaximum(99);
     warpAffine_center_y_SpinBox->setValue(50);//设置一个默认值
     warpAffine_center_y_SpinBox->setPrefix("0.");//前缀
 
     warpAffine_center_y_slider = new QSlider(ui->widget_for_layout);
     warpAffine_center_y_slider->setOrientation(Qt::Horizontal);//水平方向
-    warpAffine_center_y_slider->setMinimum(1);
+    warpAffine_center_y_slider->setMinimum(0);
     warpAffine_center_y_slider->setMaximum(99);
     warpAffine_center_y_slider->setSingleStep(10);//步长 动一下移动的距离
     warpAffine_center_y_slider->setTickInterval(5); // 设置刻度间隔
@@ -688,7 +719,7 @@ void base_process::on_action_warpAffine_triggered()
     warpAffine_angle_slider->setMinimum(-180);
     warpAffine_angle_slider->setMaximum(180);
     warpAffine_angle_slider->setSingleStep(10);//步长 动一下移动的距离
-    warpAffine_angle_slider->setTickInterval(5); // 设置刻度间隔
+    warpAffine_angle_slider->setTickInterval(20); // 设置刻度间隔
     warpAffine_angle_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
     warpAffine_angle_slider->setValue(0);//设置一个默认值
 
@@ -843,7 +874,7 @@ void base_process::on_action_logPolar_triggered()
     logPolar_Magnitude_slider->setMinimum(1);
     logPolar_Magnitude_slider->setMaximum(800);
     logPolar_Magnitude_slider->setSingleStep(10);//步长 动一下移动的距离
-    logPolar_Magnitude_slider->setTickInterval(10); // 设置刻度间隔
+    logPolar_Magnitude_slider->setTickInterval(20); // 设置刻度间隔
     logPolar_Magnitude_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
     logPolar_Magnitude_slider->setValue(80);//设置一个默认值
 
@@ -1294,9 +1325,9 @@ void base_process::on_action_adapt_triggered()
     }
     close_other_obj();
 
-    jiben_THRESH_adapt_show01 = new QLabel(tr("                  自适应阈值算法："),ui->widget_for_layout);
-    jiben_THRESH_adapt_show02 = new QLabel(tr("                  阈值类型："),ui->widget_for_layout);
-    jiben_THRESH_adapt_show03 = new QLabel(tr("设置最大阈值："),ui->widget_for_layout);
+    jiben_THRESH_adapt_show01 = new QLabel(tr("自适应阈值算法："),ui->widget_for_layout);
+    jiben_THRESH_adapt_show02 = new QLabel(tr("阈值类型："),ui->widget_for_layout);
+    jiben_THRESH_adapt_show03 = new QLabel(tr("最大阈值："),ui->widget_for_layout);
     jiben_THRESH_adapt_show04 = new QLabel(tr("偏移常量："),ui->widget_for_layout);
 
     jiben_THRESH_adapt_meth = new QComboBox(ui->widget_for_layout);
@@ -2242,7 +2273,7 @@ void base_process::on_action_art_triggered()
     select_art->addItem(tr("老照片"),9);
     connect(select_art, SIGNAL(activated(const QString &)),this, SLOT(art_process()));
 
-    show_art =  new QLabel(tr("滤镜类型："),ui->widget_for_layout);
+    show_art =  new QLabel(tr("艺术效果--滤镜类型："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -2572,7 +2603,7 @@ void base_process::on_action_light_triggered()
     select_light->addItem(tr("高反差保留"),4);
     connect(select_light, SIGNAL(activated(const QString &)),this, SLOT(light_process()));
 
-    show_light =  new QLabel(tr("滤镜类型："),ui->widget_for_layout);
+    show_light =  new QLabel(tr("光线效果--滤镜类型："),ui->widget_for_layout);
 
     if(widget_layout != NULL)
     {
@@ -2705,13 +2736,13 @@ void base_process::on_action_diaoke_triggered()
 
     diaoke_canshu_SpinBox = new QSpinBox(ui->widget_for_layout);
     diaoke_canshu_SpinBox->setMinimum(-200);
-    diaoke_canshu_SpinBox->setMaximum(200);
+    diaoke_canshu_SpinBox->setMaximum(300);
     diaoke_canshu_SpinBox->setValue(1);//设置一个默认值
 
     diaoke_canshu_slider = new QSlider(ui->widget_for_layout);
     diaoke_canshu_slider->setOrientation(Qt::Horizontal);//水平方向
     diaoke_canshu_slider->setMinimum(-200);
-    diaoke_canshu_slider->setMaximum(200);
+    diaoke_canshu_slider->setMaximum(300);
     diaoke_canshu_slider->setSingleStep(10);//步长 动一下移动的距离
     diaoke_canshu_slider->setTickInterval(10); // 设置刻度间隔
     diaoke_canshu_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
@@ -3439,13 +3470,13 @@ void base_process::on_action_lunkuojiance_triggered()
     widget_layout->addWidget(show_info_lunkuojiance,0,2,1,2);
     widget_layout->addWidget(show_input_lunkuojiance_thresh1,1,0);
     widget_layout->addWidget(lunkuojiance_SpinBox_l,1,1);
-    widget_layout->addWidget(lunkuojiance_slider_l,1,2,1,2);
+    widget_layout->addWidget(lunkuojiance_slider_l,1,2,1,3);
     widget_layout->addWidget(show_input_lunkuojiance_thresh2,2,0);
     widget_layout->addWidget(lunkuojiance_SpinBox_h,2,1);
-    widget_layout->addWidget(lunkuojiance_slider_h,2,2,1,2);
+    widget_layout->addWidget(lunkuojiance_slider_h,2,2,1,3);
     widget_layout->addWidget(show_lunkuojiance_mianji_shaixuan,3,0);
     widget_layout->addWidget(lunkuojiance_mianji_shaixuan_SpinBox,3,1);
-    widget_layout->addWidget(lunkuojiance_mianji_shaixuan_slider,3,2,1,2);
+    widget_layout->addWidget(lunkuojiance_mianji_shaixuan_slider,3,2,1,3);
     widget_layout->addWidget(lunkuojiance_RETR_QComboBox,4,0);
     widget_layout->addWidget(lunkuojiance_APPROX_QComboBox,4,1);
     widget_layout->addWidget(lunkuojiance_lunkuocuxi_QComboBox,4,2);
@@ -3540,9 +3571,10 @@ void base_process::lunkuojiance_process()
     vector<RotatedRect>minRect(g_vContours.size());//轮廓外接可旋转矩形
     vector<RotatedRect>minEllipse(g_vContours.size());//轮廓外接椭圆
 
+    bool hull_fangxiang = rand()&1 == 1? true:false;//凸包方向随机
     for (unsigned int i = 0; i < g_vContours.size(); i++)
     {
-        convexHull(Mat(g_vContours[i]),hull[i],false);//凸包
+        convexHull(Mat(g_vContours[i]),hull[i],hull_fangxiang);//凸包
 
         approxPolyDP(Mat(g_vContours[i]), contours_poly[i], 3, true);//本轮廓的外接多边形
         boundRect[i] = boundingRect(Mat(contours_poly[i]));//从外接多边形获取外接矩形
@@ -4196,7 +4228,7 @@ void base_process::on_action_jiaodianjiance_triggered()
     connect(Features_pixel_blockSize_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(Features_pixel()));
 
     Features_pixel_draw_color = new QCheckBox(ui->widget_for_layout);
-    Features_pixel_draw_color->setText(tr("单色/彩色"));
+    Features_pixel_draw_color->setText(tr("单色/多色"));
     connect(Features_pixel_draw_color, SIGNAL(stateChanged(int)), this, SLOT(Features_pixel()));
 
     Features_pixel_line_cuxi_SpinBox = new QSpinBox(ui->widget_for_layout);
@@ -4247,7 +4279,7 @@ void base_process::on_action_jiaodianjiance_triggered()
     Features_pixel();
 }
 
-//角点检测
+//角点检测处理
 void base_process::Features_pixel()
 {
     if(Features_pixel_qualityLevel_slider->value() >=10)
@@ -4462,6 +4494,112 @@ void base_process::process_keans()
     dstlabel_show(dstImage);
 }
 
+//漫水填充分割
+void base_process::on_action_floodFill_triggered()
+{
+    if (srcImage.empty())
+    {
+        QMessageBox::information(this,"提示","请先打开一张图片");
+        return;
+    }
+    close_other_obj();
+
+    floodfill_lowDifference_SpinBox = new QSpinBox(ui->widget_for_layout);
+    floodfill_lowDifference_SpinBox->setMinimum(0);
+    floodfill_lowDifference_SpinBox->setMaximum(255);
+    floodfill_lowDifference_SpinBox->setValue(0);//设置一个默认值
+
+    floodfill_lowDifference_slider = new QSlider(ui->widget_for_layout);
+    floodfill_lowDifference_slider->setOrientation(Qt::Horizontal);//水平方向
+    floodfill_lowDifference_slider->setMinimum(0);
+    floodfill_lowDifference_slider->setMaximum(255);
+    floodfill_lowDifference_slider->setSingleStep(10);//步长 动一下移动的距离
+    floodfill_lowDifference_slider->setTickInterval(10); // 设置刻度间隔
+    floodfill_lowDifference_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
+    floodfill_lowDifference_slider->setValue(0);//设置一个默认值
+
+    connect(floodfill_lowDifference_slider, SIGNAL(valueChanged(int)), floodfill_lowDifference_SpinBox, SLOT(setValue(int)));
+    connect(floodfill_lowDifference_SpinBox, SIGNAL(valueChanged(int)), floodfill_lowDifference_slider, SLOT(setValue(int)));
+
+    connect(floodfill_lowDifference_slider, SIGNAL(valueChanged(int)), this, SLOT(do_floodfill()));
+    connect(floodfill_lowDifference_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(do_floodfill()));
+
+    floodfill_upDifference_SpinBox = new QSpinBox(ui->widget_for_layout);
+    floodfill_upDifference_SpinBox->setMinimum(0);
+    floodfill_upDifference_SpinBox->setMaximum(255);
+    floodfill_upDifference_SpinBox->setValue(0);//设置一个默认值
+
+    floodfill_upDifference_slider = new QSlider(ui->widget_for_layout);
+    floodfill_upDifference_slider->setOrientation(Qt::Horizontal);//水平方向
+    floodfill_upDifference_slider->setMinimum(0);
+    floodfill_upDifference_slider->setMaximum(255);
+    floodfill_upDifference_slider->setSingleStep(10);//步长 动一下移动的距离
+    floodfill_upDifference_slider->setTickInterval(10); // 设置刻度间隔
+    floodfill_upDifference_slider->setTickPosition(QSlider::TicksAbove);  //刻度在上方
+    floodfill_upDifference_slider->setValue(0);//设置一个默认值
+
+    connect(floodfill_upDifference_slider, SIGNAL(valueChanged(int)), floodfill_upDifference_SpinBox, SLOT(setValue(int)));
+    connect(floodfill_upDifference_SpinBox, SIGNAL(valueChanged(int)), floodfill_upDifference_slider, SLOT(setValue(int)));
+
+    connect(floodfill_upDifference_slider, SIGNAL(valueChanged(int)), this, SLOT(do_floodfill()));
+    connect(floodfill_upDifference_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(do_floodfill()));
+
+    floodfill_liantongxing = new QComboBox(ui->widget_for_layout);
+    floodfill_liantongxing->addItem(tr("4连通"),4);
+    floodfill_liantongxing->addItem(tr("8连通"),8);
+    connect(floodfill_liantongxing, SIGNAL(activated(const QString &)),this, SLOT(do_floodfill()));
+
+    floodfill_show01 = new QLabel(tr("当前点与种子点间颜色负差最大值："),ui->widget_for_layout);
+    floodfill_show02 = new QLabel(tr("当前点与种子点间颜色正差最大值："),ui->widget_for_layout);
+    floodfill_show03 = new QLabel(tr("像素连通性："),ui->widget_for_layout);
+
+    if(widget_layout != NULL)
+    {
+        delete widget_layout;
+        widget_layout = NULL;
+    }
+    widget_layout = new QGridLayout(ui->widget_for_layout);
+    widget_layout->addWidget(floodfill_show03,0,0);
+    widget_layout->addWidget(floodfill_liantongxing,0,1);
+    widget_layout->addWidget(floodfill_show01,1,0);
+    widget_layout->addWidget(floodfill_lowDifference_SpinBox,1,1);
+    widget_layout->addWidget(floodfill_lowDifference_slider,1,2,1,3);
+    widget_layout->addWidget(floodfill_show02,2,0);
+    widget_layout->addWidget(floodfill_upDifference_SpinBox,2,1);
+    widget_layout->addWidget(floodfill_upDifference_slider,2,2,1,3);
+    widget_layout->setAlignment(Qt::AlignVCenter);
+    ui->widget_for_layout->setLayout(widget_layout);
+
+    do_floodfill();
+}
+
+//漫水填充处理
+void base_process::do_floodfill()
+{
+    bool bIsColor;//是否彩色图
+    //dstImage = Mat::zeros(srcImage.size(), CV_8UC3);
+    srcImage.copyTo(dstImage);
+
+    int low_diff_int = floodfill_lowDifference_slider->value();
+    int up_diff_int = floodfill_upDifference_slider->value();
+
+    Scalar low_diff = Scalar(low_diff_int,low_diff_int,low_diff_int);
+    Scalar up_diff = Scalar(up_diff_int,up_diff_int,up_diff_int);
+
+    int flags = floodfill_liantongxing->currentData(Qt::UserRole).toInt() + (255<<8) + FLOODFILL_FIXED_RANGE;
+
+    Rect ccomp;//定义重绘区域的最小边界矩形区域
+
+    floodFill(dstImage,
+              Point(rand()&(dstImage.cols - 2) + 1,rand()&(dstImage.rows - 2) + 1), //随机种子点
+              Scalar((unsigned)theRNG() &255,(unsigned)theRNG() &255,(unsigned)theRNG() &255),
+              &ccomp,
+              low_diff,
+              up_diff,
+              flags);
+    dstlabel_show(dstImage);
+}
+
 //拖动事件 拖动打开图片
 void base_process::dragEnterEvent(QDragEnterEvent* event)
 {
@@ -4533,8 +4671,8 @@ void base_process::dropEvent(QDropEvent* event)
 void base_process::on_action_help_triggered()
 {    
     QMessageBox::information(this,"说明","基于Qt5.9 & OpenCV3.0"
-                                       "\n版本：1.9.5"
-                                       "\n更新时间：2019年2月13日"
+                                       "\n版本：2.0.1"
+                                       "\n更新时间：2019年3月4日"
                                        "\n作者QQ：709579619 | 微信：siyuan7095"
                                        "\n本软件不定时更新，更新发布地址："
                                        "\nhttps://github.com/siyuan7095/picture_process");
